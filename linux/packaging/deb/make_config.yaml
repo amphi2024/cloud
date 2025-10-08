@@ -1,0 +1,39 @@
+display_name: Cloud
+package_name: amphi-cloud
+maintainer:
+  name: Amphi
+  email: amphiprioninae2024@gmail.com
+priority: optional
+section: network::file
+installed_size: 45000
+essential: false
+icon: assets/logo/icon_512x512.png
+
+pre_dependencies:
+  - libc6 (>= 2.31)
+
+dependencies:
+  - libfuse2
+  - mpv
+  - libmimalloc2.0
+
+postinstall_scripts:
+  - echo "Installed Amphi Cloud successfully"
+postuninstall_scripts:
+  - echo "Uninstalled Amphi Cloud successfully"
+
+keywords:
+  - Cloud
+  - Storage
+  - Sync
+  - Backup
+  - Files
+
+generic_name: Cloud Storage
+
+categories:
+  - Network
+  - Utility
+  - FileManager
+
+startup_notify: false

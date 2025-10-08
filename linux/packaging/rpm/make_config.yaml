@@ -1,0 +1,21 @@
+display_name: Cloud
+packager: Amphi
+packagerEmail: amphiprioninae2024@gmail.com
+url: https://amphi.site
+license: GPLv3
+
+icon: assets/logo/icon_512x512.png
+
+keywords:
+  - Cloud
+
+generic_name: Cloud Storage
+summary: A self-hosted cloud for secure file storage
+group: Applications/Network
+
+categories:
+  - Network
+  - Utility
+  - FileManager
+
+startup_notify: false

@@ -1,0 +1,89 @@
+{
+  "@language": "Language",
+  "@settings": "Settings",
+  "@guest": "Guest",
+  "@add_account": "Add Account",
+  "@use_my_own_server": "Use My Own Server",
+  "@trash": "Trash",
+  "files": "Files",
+  "file": "File",
+  "folder": "Folder",
+  "home": "Home",
+
+  "@register": "Register",
+  "@login": "Login",
+  "@who_are_you": "Who are you?",
+  "@hello": "Hello!",
+  "@welcome": "Welcome!",
+  "@change_password": "Change Password",
+  "@change_username": "Change Name",
+  "@remove_user": "Remove from Device",
+
+  "@failed_to_connect": "Failed to connect",
+  "@failed_to_auth": "Failed to Authentication",
+  "@please_set_server_address": "Please go to the settings and configure the server address",
+
+  "@dialog_title_logout": "Are you sure you want to logout?",
+  "@dialog_title_delete_theme": "Are you sure you want to delete this theme?",
+  "@dialog_title_delete_color": "Are you sure you want to delete this color?",
+  "@dialog_title_remove_user": "Are you sure you want to remove this user from the device?",
+  "@dialog_title_move_to_trash_file": "Are you sure you want to move this file to the trash?",
+  "@dialog_title_move_to_trash_selected_files": "Are you sure you want to move these files to the trash?",
+  "@dialog_title_restore_selected_files": "Are you sure you want to restore these files from the trash?",
+  "@dialog_title_delete_selected_files": "Are you sure you want to permanently delete these files?",
+  "@dialog_action_yes": "Yes",
+  "@dialog_action_no": "No",
+
+  "@hint_server_address": "http(s)://your_address.com",
+  "@hint_id": "id",
+  "@hint_password": "password",
+  "@hint_confirm_password": "confirm password",
+  "@hint_username": "name",
+  "@hint_password_different": "The entered passwords are different",
+  "@hint_old_password_different": "The old password is incorrect",
+  "@hint_input_id": "Please enter the ID",
+  "@hint_input_username": "Please enter the name",
+  "@hint_input_password": "Please enter the password",
+  "@hint_input_new_password": "Please enter a new password",
+  "@hint_input_old_password": "Please enter the old password",
+  "@id_already_taken": "This ID is already in use",
+  "hint_filename": "File name",
+
+  "@transparent_navigation_bar": "Transparent Navigation Bar",
+
+  "@test_connection": "Test Connection",
+  "@connection_failed": "Connection Failed",
+
+  "@locale_label_system": "System",
+
+  "sort_by_name": "Sort by Name",
+  "sort_by_created": "Sort by Created Date",
+  "sort_by_modified": "Sort by Modified Date",
+  "sort_by_uploaded": "Sort by Uploaded Date",
+  "sort_by_size": "Sort by Size",
+  "sort_by_deleted": "Sort by Deleted Date",
+
+  "@video_error": "Failed to load video",
+  "@download_failed": "Download failed",
+  "failed_to_create": "Failed to create file",
+  "failed_to_create_folder": "Failed to create folder",
+
+  "no_files": "There are no files yet",
+  "no_files_in_trash": "There are no files in trash",
+
+  "alert_login_required": "You must be logged in to create a file or folder",
+
+  "created": "Created",
+  "modified": "Modified",
+  "uploaded": "Uploaded",
+  "size": "Size",
+
+  "details": "Details",
+  "rename": "Rename",
+  "export": "Export",
+
+  "export_successful": "File exported successfully",
+  "hint_search_files": "Search files...",
+  "failed_load_file": "Failed to load file",
+  "message_file_too_large": "This file is too large to display"
+}
