@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=Cloud
+Comment=A self-hosted cloud for secure file storage
+Exec=amphi-cloud.cloud
+Icon=icon.png
+Terminal=false
+Type=Application
+Categories=Network;Utility;FileManager;
+StartupNotify=false
