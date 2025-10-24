@@ -13,10 +13,8 @@ Keep your archive under control: sync your files across devices via a self-hoste
 
 - [Official Website](https://amphi.site/cloud)
 - [GitHub Releases](https://github.com/amphi2024/cloud/releases/latest)
-
-[//]: # (- [Play Store]&#40;https://play.google.com/store/apps/details?id=com.amphi.cloud&#41;)
-
-[//]: # (- [iOS App Store]&#40;https://apps.apple.com/app/amphi-cloud/id6740662483&#41;)
+- [Play Store](https://play.google.com/store/apps/details?id=com.amphi.cloud)
+- [iOS App Store](https://apps.apple.com/us/app/amphi-cloud/id6753095443)
 - [Scoop](https://github.com/amphi2024/scoop-bucket)
 - [Homebrew](https://github.com/amphi2024/homebrew-amphi)
 - [AUR](https://aur.archlinux.org/packages/amphi-cloud)
