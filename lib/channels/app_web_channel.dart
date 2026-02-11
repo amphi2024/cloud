@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:amphi/models/app_web_channel_core.dart';
 import 'package:amphi/models/update_event.dart';
@@ -49,39 +48,6 @@ class AppWebChannel extends AppWebChannelCore {
     }, cancelOnError: true);
   }
 
-  void getEvents({required void Function(List<UpdateEvent>) onResponse}) async {
-    List<UpdateEvent> list = [];
-    final response = await get(
-      Uri.parse("$serverAddress/cloud/events"),
-      headers: <String, String>{'Content-Type': 'application/json; charset=UTF-8', "Authorization": appWebChannel.token},
-    );
-    if (response.statusCode == HttpStatus.ok) {
-      List<dynamic> decoded = jsonDecode(utf8.decode(response.bodyBytes));
-      for (Map<String, dynamic> map in decoded) {
-        UpdateEvent updateEvent = UpdateEvent.fromJson(map);
-        list.add(updateEvent);
-      }
-      onResponse(list);
-    } else if (response.statusCode == HttpStatus.unauthorized) {
-      appStorage.selectedUser.token = "";
-    }
-  }
-
-  void acknowledgeEvent(UpdateEvent updateEvent) async {
-    Map<String, dynamic> data = {
-      'value': updateEvent.value,
-      'action': updateEvent.action,
-    };
-
-    String postData = json.encode(data);
-
-    await delete(
-      Uri.parse("${appSettings.serverAddress}/cloud/events"),
-      headers: <String, String>{'Content-Type': 'application/json; charset=UTF-8', "Authorization": appStorage.selectedUser.token},
-      body: postData,
-    );
-  }
-
   Future<void> getFiles({required void Function(List<FileModel>) onSuccess, void Function(int?)? onFailed}) async {
     try {
       final response = await get(
@@ -105,27 +71,6 @@ class AppWebChannel extends AppWebChannelCore {
 
         }
         onSuccess(items);
-      } else {
-        if (onFailed != null) {
-          onFailed(response.statusCode);
-        }
-      }
-    } catch (e) {
-      if (onFailed != null) {
-        onFailed(null);
-      }
-    }
-  }
-
-  Future<void> getItems({required String url, required void Function(List<String>) onSuccess, void Function(int?)? onFailed}) async {
-    try {
-      final response = await get(
-        Uri.parse(url),
-        headers: <String, String>{'Content-Type': 'application/json; charset=UTF-8', "Authorization": appWebChannel.token},
-      );
-      if (response.statusCode == 200) {
-        List<dynamic> list = jsonDecode(response.body);
-        onSuccess(list.map((item) => item as String).toList());
       } else {
         if (onFailed != null) {
           onFailed(response.statusCode);

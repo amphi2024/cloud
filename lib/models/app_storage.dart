@@ -27,7 +27,7 @@ class AppStorage extends AppStorageCore {
 
   Future<void> syncDataFromEvents(WidgetRef ref) async {
     if (appWebChannel.token.isNotEmpty) {
-      appWebChannel.getEvents(onResponse: (updateEvents) async {
+      appWebChannel.getEvents(onSuccess: (updateEvents) async {
         for (UpdateEvent updateEvent in updateEvents) {
           syncData(updateEvent, ref);
         }
