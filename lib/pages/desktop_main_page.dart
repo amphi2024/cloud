@@ -24,7 +24,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../channels/app_web_channel.dart';
 import '../components/custom_window_button.dart';
-import '../components/desktop_nav_menu.dart';
+import '../components/sidebar.dart';
 import '../dialogs/edit_filename_dialog.dart';
 import '../utils/file_utils.dart';
 import '../utils/on_file_pressed.dart';
@@ -75,7 +75,7 @@ class WideMainPageState extends ConsumerState<DesktopMainPage> {
     return Scaffold(
       body: Stack(
         children: [
-          Positioned(left: 0, top: 0, bottom: 0, child: DesktopNavMenu()),
+          Positioned(left: 0, top: 0, bottom: 0, child: Sidebar()),
           Positioned(
             left: sidebarWidth,
             right: 0,

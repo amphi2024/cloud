@@ -19,8 +19,8 @@ import '../providers/providers.dart';
 import '../utils/account_utils.dart';
 import '../views/settings_view.dart';
 
-class DesktopNavMenu extends ConsumerWidget {
-  const DesktopNavMenu({super.key});
+class Sidebar extends ConsumerWidget {
+  const Sidebar({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
