@@ -123,7 +123,7 @@ class WideMainPageState extends ConsumerState<DesktopMainPage> {
                               colors: CustomWindowButtonColors(
                                 mouseOver: const Color(0xFFD32F2F),
                                 mouseDown: const Color(0xFFB71C1C),
-                                iconNormal: const Color(0xFF805306),
+                                iconNormal: Theme.of(context).textTheme.bodyMedium!.color,
                                 iconMouseOver: const Color(0xFFFFFFFF),
                                 normal: Theme.of(context).scaffoldBackgroundColor,
                               ),
