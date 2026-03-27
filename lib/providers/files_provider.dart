@@ -141,6 +141,10 @@ class FilesNotifier extends Notifier<FilesState> {
     });
   }
 
+  Future<void> rebuild() async {
+
+  }
+
 }
 
 final filesProvider = NotifierProvider<FilesNotifier, FilesState>(FilesNotifier.new);

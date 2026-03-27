@@ -1,8 +1,10 @@
 import 'dart:io';
 
 import 'package:amphi/models/app_localizations.dart';
+import 'package:amphi/widgets/dialogs/confirmation_dialog.dart';
 import 'package:bitsdojo_window/bitsdojo_window.dart';
 import 'package:cloud/components/content/file_content.dart';
+import 'package:cloud/utils/delete_files.dart';
 import 'package:cloud/views/files/desktop_file_grid_item.dart';
 import 'package:cloud/components/thumbnail/file_thumbnail.dart';
 import 'package:cloud/components/history_bar.dart';
@@ -185,22 +187,36 @@ class WideMainPageState extends ConsumerState<DesktopMainPage> {
                           onFilePressed(fileModel: fileModel, context: context, ref: ref);
                         },
                         onSecondaryTapUp: (details) {
-                          showContextMenu(context, contextMenu: ContextMenu(position: details.globalPosition, entries: [
-                            TextMenuItem(label: Text(AppLocalizations.of(context).get("details")), onSelected: (d) {
-                              showDialog(context: context, builder: (context) => FileDetailDialog(fileModel: fileModel));
-                            }),
-                            TextMenuItem(label: Text(AppLocalizations.of(context).get("rename")), onSelected: (d) {
-                              showDialog(context: context, builder: (context) {
-                                return EditFilenameDialog(initialValue: fileModel.name, onSave: (folderName) {
-                                  fileModel.name = folderName;
-                                  fileModel.modified = DateTime.now();
-                                  appWebChannel.updateFileInfo(fileModel: fileModel, onSuccess: () {
-                                    ref.read(filesProvider.notifier).insertFile(fileModel);
+                          if(controller.selectedItems.isNotEmpty && fragmentIndex == FragmentIndex.trash) {
+                            showContextMenu(context, contextMenu: ContextMenu(position: details.globalPosition, entries: [
+                              TextMenuItem(label: Text(AppLocalizations.of(context).get("delete")), onSelected: (d) {
+                                showDialog(context: context, builder: (context) => ConfirmationDialog(title: AppLocalizations.of(context).get("@dialog_title_delete_selected_files"), onConfirmed: () {
+                                  permanentlyDeleteSelectedFiles(ref: ref, selectedIds: controller.selectedItems, desktopListviewController: controller);
+                                }));
+                              }),
+                              TextMenuItem(label: Text(AppLocalizations.of(context).get("restore")), onSelected: (d) {
+                                restoreSelectedFiles(ref: ref, selectedIds: controller.selectedItems, desktopListviewController: controller);
+                              })
+                            ]));
+                          }
+                          else {
+                            showContextMenu(context, contextMenu: ContextMenu(position: details.globalPosition, entries: [
+                              TextMenuItem(label: Text(AppLocalizations.of(context).get("details")), onSelected: (d) {
+                                showDialog(context: context, builder: (context) => FileDetailDialog(fileModel: fileModel));
+                              }),
+                              TextMenuItem(label: Text(AppLocalizations.of(context).get("rename")), onSelected: (d) {
+                                showDialog(context: context, builder: (context) {
+                                  return EditFilenameDialog(initialValue: fileModel.name, onSave: (folderName) {
+                                    fileModel.name = folderName;
+                                    fileModel.modified = DateTime.now();
+                                    appWebChannel.updateFileInfo(fileModel: fileModel, onSuccess: () {
+                                      ref.read(filesProvider.notifier).insertFile(fileModel);
+                                    });
                                   });
                                 });
-                              });
-                            })
-                          ]));
+                              })
+                            ]));
+                          }
                         },
                         child: DragTarget<Set<String>>(
                           onAcceptWithDetails: (details) {

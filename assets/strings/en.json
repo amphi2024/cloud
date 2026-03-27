@@ -12,6 +12,8 @@
   "new_file": "New File",
   "new_folder": "New Folder",
   "name": "Name",
+  "delete": "Delete",
+  "restore": "Restore",
 
   "@register": "Register",
   "@login": "Login",

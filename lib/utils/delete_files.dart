@@ -31,3 +31,11 @@ void restoreSelectedFiles({required WidgetRef ref, required Set<String> selected
   ref.read(selectedFilesProvider.notifier).endSelection();
   desktopListviewController?.endSelection();
 }
+
+void permanentlyDeleteSelectedFiles({required WidgetRef ref, required Set<String> selectedIds, DesktopListviewController? desktopListviewController}) {
+  for (var id in selectedIds) {
+    appWebChannel.deleteFile(id: id);
+  }
+  ref.read(filesProvider.notifier).deleteFiles(selectedIds.toList());
+  ref.read(selectedFilesProvider.notifier).endSelection();
+}

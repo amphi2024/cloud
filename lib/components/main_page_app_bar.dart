@@ -1,10 +1,8 @@
 import 'package:amphi/models/app_localizations.dart';
 import 'package:amphi/widgets/dialogs/confirmation_dialog.dart';
-import 'package:cloud/channels/app_web_channel.dart';
 import 'package:cloud/components/popup_menu_items.dart';
 import 'package:cloud/dialogs/select_folder_dialog.dart';
 import 'package:cloud/models/file_model.dart';
-import 'package:cloud/providers/files_provider.dart';
 import 'package:cloud/providers/providers.dart';
 import 'package:cloud/utils/delete_files.dart';
 import 'package:cloud/utils/screen_size.dart';
@@ -162,12 +160,7 @@ List<Widget> trashSelectionAction({
             return ConfirmationDialog(
               title: AppLocalizations.of(context).get("@dialog_title_delete_selected_files"),
               onConfirmed: () {
-                final list = ref.read(selectedFilesProvider)!;
-                for (var id in list) {
-                  appWebChannel.deleteFile(id: id);
-                }
-                ref.read(filesProvider.notifier).deleteFiles(list);
-                ref.read(selectedFilesProvider.notifier).endSelection();
+                permanentlyDeleteSelectedFiles(ref: ref, selectedIds: selectedItems!.toSet());
               },
             );
           },
