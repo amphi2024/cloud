@@ -181,7 +181,9 @@ class WideMainPageState extends ConsumerState<DesktopMainPage> {
                       return DesktopListviewItem(
                         id: idList[index],
                         controller: controller,
-                        dragFeedback: FileThumbnail(fileModel: fileModel, iconSize: 50),
+                        dragFeedback: Material(
+                            color: Colors.transparent,
+                            child: FileThumbnail(fileModel: fileModel, iconSize: 50)),
                         dragFeedbackOffset: Offset.zero,
                         onPressed: () {
                           onFilePressed(fileModel: fileModel, context: context, ref: ref);

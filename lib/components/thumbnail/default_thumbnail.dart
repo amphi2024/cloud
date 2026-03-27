@@ -16,7 +16,7 @@ class DefaultThumbnail extends StatelessWidget {
       child: Stack(
         children: [
           Center(child: Image.asset("assets/icons/file.png", cacheWidth: iconSize.toInt())),
-          Center(child: Text(fileModel.fileExtension.toUpperCase(), style: TextStyle(color: Color.fromARGB(255, 55, 55, 55))))
+          Center(child: Text(fileModel.fileExtension.toUpperCase(), style: TextStyle(color: Color.fromARGB(255, 55, 55, 55), fontSize: iconSize / 5)))
         ],
       ),
     );
