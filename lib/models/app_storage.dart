@@ -49,9 +49,4 @@ class AppStorage extends AppStorageCore {
 
     appWebChannel.acknowledgeEvent(updateEvent);
   }
-
-  void refreshDataWithServer(WidgetRef ref) async {
-    ref.read(filesProvider.notifier).init();
-  }
-
 }
