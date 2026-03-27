@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:amphi/models/app_localizations.dart';
 import 'package:bitsdojo_window/bitsdojo_window.dart';
 import 'package:cloud/components/content/file_content.dart';
-import 'package:cloud/components/desktop_file_grid_item.dart';
+import 'package:cloud/views/files/desktop_file_grid_item.dart';
 import 'package:cloud/components/thumbnail/file_thumbnail.dart';
 import 'package:cloud/components/history_bar.dart';
 import 'package:cloud/components/main_page_app_bar.dart';

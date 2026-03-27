@@ -1,6 +1,7 @@
 import 'package:cloud/components/thumbnail/file_thumbnail.dart';
 import 'package:cloud/models/file_model.dart';
 import 'package:cloud/providers/providers.dart';
+import 'package:cloud/views/files/file_upload_progress.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -55,7 +56,11 @@ class FileGridItem extends ConsumerWidget {
                   ),
                 ),
               ),
-            )
+            ),
+            Positioned(
+                right: 0,
+                bottom: 0,
+                child: FileUploadProgress(fileId: fileModel.id))
           ],
         ),
       ),

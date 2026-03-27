@@ -37,7 +37,6 @@ class FilesNotifier extends Notifier<FilesState> {
 
   void insertFile(FileModel fileModel) {
     final files = {...state.files, fileModel.id: fileModel};
-    // final idList = state.idLists[fileModel.id].contains(fileModel.id) ? [...state.idLists] : [...state.idLists, fileModel.id];
 
     final list = state.idLists.putIfAbsent(fileModel.parentId, () => []);
     final mergedList = list.contains(fileModel.id) ? [...list] : [...list, fileModel.id];
@@ -116,7 +115,6 @@ class FilesNotifier extends Notifier<FilesState> {
 
   void init() {
     appWebChannel.getFiles(onSuccess: (list) {
-      print(list);
       final Map<String, FileModel> files = {};
       final Map<String, List<String>> idLists = {};
       final List<String> trash = [];
@@ -140,7 +138,6 @@ class FilesNotifier extends Notifier<FilesState> {
 
       state = FilesState(files, idLists, trash);
     }, onFailed: (code) {
-      print(code);
     });
   }
 

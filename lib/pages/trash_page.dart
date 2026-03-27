@@ -4,7 +4,7 @@ import 'package:cloud/models/file_model.dart';
 import 'package:cloud/models/fragment_index.dart';
 import 'package:cloud/providers/files_provider.dart';
 import 'package:cloud/providers/providers.dart';
-import 'package:cloud/views/files_grid_view.dart';
+import 'package:cloud/views/files/files_grid_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 

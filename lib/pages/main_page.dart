@@ -18,7 +18,7 @@ import 'package:cloud/providers/providers.dart';
 import 'package:cloud/utils/account_utils.dart';
 import 'package:cloud/utils/file_utils.dart';
 import 'package:cloud/utils/toast.dart';
-import 'package:cloud/views/files_grid_view.dart';
+import 'package:cloud/views/files/files_grid_view.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';

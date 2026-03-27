@@ -3,7 +3,7 @@ import 'package:cloud/providers/providers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../components/file_grid_item.dart';
+import '../views/files/file_grid_item.dart';
 import '../models/file_model.dart';
 
 class SelectFolderDialog extends ConsumerStatefulWidget {

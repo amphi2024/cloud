@@ -3,7 +3,9 @@ import 'dart:io';
 import 'package:amphi/models/app_localizations.dart';
 import 'package:cloud/channels/app_web_channel.dart';
 import 'package:cloud/models/file_model.dart';
+import 'package:cloud/models/transfer_state.dart';
 import 'package:cloud/providers/files_provider.dart';
+import 'package:cloud/providers/transfers_provider.dart';
 import 'package:cloud/utils/toast.dart';
 import 'package:crypto/crypto.dart';
 import 'package:file_picker/file_picker.dart';
@@ -33,14 +35,15 @@ void pickFilesAndUpload({required String currentFolderId, required WidgetRef ref
         "size": platformFile.size
       };
 
-      appWebChannel.createFile(data: jsonData, onSuccess: (id) {
-        appWebChannel.uploadFileToCloud(id: id, filePath: platformFile.xFile.path, onSuccess: () {
-          var fileModel = FileModel(id: id, data: jsonData);
-          ref.read(filesProvider.notifier).insertFile(fileModel);
+      appWebChannel.createFile(data: jsonData, onSuccess: (fileId) {
+        var fileModel = FileModel(id: fileId, data: jsonData);
+        ref.read(filesProvider.notifier).insertFile(fileModel);
+        appWebChannel.uploadFileToCloud(id: fileId, filePath: platformFile.xFile.path, onSuccess: () {
+          ref.read(transfersProvider.notifier).removeItem(fileId);
         }, onFailed: (code) {
           onFailToCreateFile(context);
         }, onProgress: (sent, total) {
-
+          ref.read(transfersProvider.notifier).insertItem(TransferState(fileId: fileId, transferredBytes: sent, totalBytes: total));
         });
       }, onFailed: (code) {
         onFailToCreateFile(context);

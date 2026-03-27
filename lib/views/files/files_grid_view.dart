@@ -1,11 +1,10 @@
-import 'package:cloud/components/file_grid_item.dart';
+import 'package:cloud/views/files/file_grid_item.dart';
 import 'package:cloud/utils/on_file_pressed.dart';
 import 'package:cloud/utils/screen_size.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../providers/files_provider.dart';
+import '../../providers/files_provider.dart';
 
 class FilesGridView extends ConsumerStatefulWidget {
   final String placeholder;
