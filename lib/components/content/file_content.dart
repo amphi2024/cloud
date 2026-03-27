@@ -1,11 +1,9 @@
-import 'package:amphi/models/app_localizations.dart';
 import 'package:cloud/components/content/image_file_content.dart';
+import 'package:cloud/components/content/pdf_file_content.dart';
 import 'package:cloud/components/content/text_file_content.dart';
 import 'package:cloud/models/file_model.dart';
 import 'package:flutter/material.dart';
-import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 
-import '../../channels/app_web_channel.dart';
 import '../video_player.dart';
 
 class FileContent extends StatelessWidget {
@@ -46,17 +44,7 @@ class FileContent extends StatelessWidget {
       case "ts":
         return VideoPlayer(fileModel: fileModel);
       case "pdf":
-        if(fileModel.size > 10 * 1024 * 1024) {
-          return Text(AppLocalizations.of(context).get("message_file_too_large"));
-        }
-        else {
-          return SfPdfViewer.network(
-            "${appWebChannel.serverAddress}/cloud/files/${fileModel.id}/download",
-            headers: {
-              "Authorization": appWebChannel.token
-            },
-          );
-        }
+        return PdfFileContent(fileModel: fileModel);
       default:
         return TextFileContent(fileModel: fileModel, iconSize: iconSize);
     }

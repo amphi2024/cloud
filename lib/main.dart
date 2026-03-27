@@ -1,9 +1,9 @@
 import 'dart:io';
-
-import 'package:amphi/models/app.dart';
 import 'package:cloud/pages/main_page.dart';
-import 'package:cloud/pages/wide_main_page.dart';
+import 'package:cloud/pages/desktop_main_page.dart';
+import 'package:cloud/pages/tablet_main_page.dart';
 import 'package:cloud/providers/files_provider.dart';
+import 'package:cloud/utils/screen_size.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:media_kit/media_kit.dart';
@@ -17,7 +17,9 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:bitsdojo_window/bitsdojo_window.dart';
 import 'models/file_model.dart';
 
-Future<void> main() async {
+
+
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   MediaKit.ensureInitialized();
 
@@ -51,12 +53,10 @@ class MyAppState extends ConsumerState<MyApp> with WidgetsBindingObserver {
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.resumed) {
-      if (appSettings.useOwnServer) {
         if (!appWebChannel.connected) {
           appWebChannel.connectWebSocket();
         }
         appStorage.syncDataFromEvents(ref);
-      }
     }
     super.didChangeAppLifecycleState(state);
   }
@@ -74,18 +74,18 @@ class MyAppState extends ConsumerState<MyApp> with WidgetsBindingObserver {
     appWebChannel.onWebSocketEvent = (event) {
       appStorage.syncData(event, ref);
     };
-    ref.read(filesProvider.notifier).init();
 
-    if (appSettings.useOwnServer) {
       appWebChannel.connectWebSocket();
       appStorage.syncDataFromEvents(ref);
-    }
 
     appWebChannel.getDeviceInfo();
     if(Platform.isAndroid) {
       appMethodChannel.getSystemVersion();
     }
     super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ref.read(filesProvider.notifier).init();
+    });
   }
 
 
@@ -103,7 +103,7 @@ class MyAppState extends ConsumerState<MyApp> with WidgetsBindingObserver {
         GlobalCupertinoLocalizations.delegate,
       ],
       supportedLocales: AppLocalizations.supportedLocales,
-      home: App.isWideScreen(context) || App.isDesktop() ? const WideMainPage() : MainPage(folder: FileModel(id: "")),
+      home: isDesktop() ? const DesktopMainPage() : isWideScreen(context) ? TabletMainPage() : MainPage(folder: FileModel(id: "")),
     );
   }
 }

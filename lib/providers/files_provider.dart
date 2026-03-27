@@ -44,7 +44,7 @@ class FilesNotifier extends Notifier<FilesState> {
 
     final idLists = {...state.idLists, fileModel.parentId: mergedList};
     final sortOptionId = fileModel.parentId.isEmpty ? "!FILES" : fileModel.parentId;
-    idLists[fileModel.parentId]!.sortFiles(appCacheData.sortOption(sortOptionId), files);
+    idLists[fileModel.parentId]?.sortFiles(appCacheData.sortOption(sortOptionId), files);
     state = FilesState(files, idLists, [...state.trash]);
   }
 
@@ -71,8 +71,8 @@ class FilesNotifier extends Notifier<FilesState> {
     final sortOptionIdFrom = from.isEmpty ? "!FILES" : from;
     final sortOptionIdTo = to.isEmpty ? "!FILES" : to;
 
-    idLists[from]!.sortFiles(appCacheData.sortOption(sortOptionIdFrom), files);
-    idLists[sortOptionIdTo]!.sortFiles(appCacheData.sortOption(sortOptionIdFrom), files);
+    idLists[from]?.sortFiles(appCacheData.sortOption(sortOptionIdFrom), files);
+    idLists[sortOptionIdTo]?.sortFiles(appCacheData.sortOption(sortOptionIdFrom), files);
 
     state = FilesState(files, idLists, trash);
   }
@@ -80,11 +80,11 @@ class FilesNotifier extends Notifier<FilesState> {
   void restoreFiles(List<String> list) {
 
     final idLists = {...state.idLists};
-    idLists[""]!.addAll(list);
+    idLists[""]?.addAll(list);
 
     final trash = state.trash.where((id) => !list.contains(id)).toList();
     final files = {...state.files};
-    idLists[""]!.sortFiles(appCacheData.sortOption("!FILES"), files);
+    idLists[""]?.sortFiles(appCacheData.sortOption("!FILES"), files);
     state = FilesState(files, idLists, trash);
   }
 
@@ -116,6 +116,7 @@ class FilesNotifier extends Notifier<FilesState> {
 
   void init() {
     appWebChannel.getFiles(onSuccess: (list) {
+      print(list);
       final Map<String, FileModel> files = {};
       final Map<String, List<String>> idLists = {};
       final List<String> trash = [];
@@ -130,15 +131,16 @@ class FilesNotifier extends Notifier<FilesState> {
       }
       idLists.forEach((key, value) {
         if(key.isEmpty) {
-          idLists[key]!.sortFiles(appCacheData.sortOption("!FILES"), files);
+          idLists[key]?.sortFiles(appCacheData.sortOption("!FILES"), files);
         }
         else {
-          idLists[key]!.sortFiles(appCacheData.sortOption(key), files);
+          idLists[key]?.sortFiles(appCacheData.sortOption(key), files);
         }
       });
 
       state = FilesState(files, idLists, trash);
     }, onFailed: (code) {
+      print(code);
     });
   }
 

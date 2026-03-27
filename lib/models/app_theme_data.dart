@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:amphi/models/app.dart';
 
+import '../utils/screen_size.dart';
 import 'app_theme.dart';
 
 class AppThemeData {
@@ -56,7 +56,7 @@ class AppThemeData {
                   fontSize: 20,
                   fontWeight: FontWeight.bold))),
       dialogBackgroundColor: backgroundColor,
-      dividerColor: inactiveColor,
+      dividerColor: Color.fromARGB(60, 153, 153, 153),
       popupMenuTheme: PopupMenuThemeData(
         surfaceTintColor: backgroundColor,
         color: backgroundColor,
@@ -66,13 +66,14 @@ class AppThemeData {
       ),
       iconButtonTheme: IconButtonThemeData(
           style: ButtonStyle(
+            mouseCursor: WidgetStatePropertyAll(MouseCursor.defer),
               surfaceTintColor: WidgetStateProperty.all(backgroundColor))),
       shadowColor:
           backgroundColor.green + backgroundColor.blue + backgroundColor.red >
                   381
               ? Colors.grey.withOpacity(0.5)
               : Colors.black.withOpacity(0.5),
-      iconTheme: IconThemeData(color: accentColor, size: App.isWideScreen(context) || App.isDesktop() ? 25 : 15),
+      iconTheme: IconThemeData(color: isDesktopOrTablet(context) ? textColor.soften(brightness) : accentColor, size: 20),
       checkboxTheme: CheckboxThemeData(
         checkColor: WidgetStateProperty.resolveWith((states) {
           if (states.contains(WidgetState.selected)) {
@@ -143,5 +144,18 @@ class AppThemeData {
       navigationDrawerTheme: NavigationDrawerThemeData(
           backgroundColor: menuBackground),
     );
+  }
+}
+
+const softenValue = 60;
+
+extension SoftenExtension on Color {
+  Color soften(Brightness brightness) {
+    if(brightness == Brightness.light) {
+      return Color.fromARGB((a * 255).round() & 0xff, ((r * 255).round() & 0xff) + softenValue, ((g * 255).round() & 0xff) + softenValue, ((b * 255).round() & 0xff) + softenValue);
+    }
+    else {
+      return Color.fromARGB((a * 255).round() & 0xff, ((r * 255).round() & 0xff) - softenValue, ((g * 255).round() & 0xff) - softenValue, ((b * 255).round() & 0xff) - softenValue);
+    }
   }
 }

@@ -1,7 +1,9 @@
 import 'dart:convert';
 
 import 'package:amphi/models/app_localizations.dart';
-import 'package:cloud/components/file_thumbnail.dart';
+import 'package:cloud/components/thumbnail/file_thumbnail.dart';
+import 'package:cloud/utils/screen_size.dart';
+import 'package:cloud/views/desktop_text_file_view.dart';
 import 'package:flutter/material.dart';
 
 import '../../channels/app_web_channel.dart';
@@ -28,22 +30,26 @@ class _TextFileContentState extends State<TextFileContent> {
     appWebChannel.downloadFileFromCloud(
       id: widget.fileModel.id,
       onSuccess: (bytes) {
-        try {
-          setState(() {
-            fileContent = utf8.decode(bytes);
-          });
-        }
-        catch(e) {
-          setState(() {
-            fileContent = null;
-          });
+        if(mounted) {
+          try {
+            setState(() {
+              fileContent = utf8.decode(bytes);
+            });
+          }
+          catch (e) {
+            setState(() {
+              fileContent = null;
+            });
+          }
         }
       },
       onProgress: (receivedLength, length) {
-        setState(() {
-          fileSize = length;
-          received = receivedLength;
-        });
+        if(mounted) {
+          setState(() {
+            fileSize = length;
+            received = receivedLength;
+          });
+        }
       },
       onFailed: (code) {
         showToast(context, "${AppLocalizations.of(context).get("failed_load_file")}. Error code: $code");
@@ -70,15 +76,19 @@ class _TextFileContentState extends State<TextFileContent> {
       return Center(child: FileThumbnail(fileModel: widget.fileModel, iconSize: widget.iconSize));
     }
     else {
-      return SingleChildScrollView(
+      final result = SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: SelectableText(
-            fileContent!,
-            maxLines: 5000,
+            fileContent!
           ),
         ),
       );
+
+      if(isDesktop()) {
+        return DesktopTextFileView(child: result);
+      }
+      return result;
     }
   }
 }

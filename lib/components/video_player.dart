@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:media_kit/media_kit.dart';
 import 'package:media_kit_video/media_kit_video.dart';
 
+import '../utils/screen_size.dart';
+
 class VideoPlayer extends StatefulWidget {
 
   final FileModel fileModel;
@@ -35,13 +37,24 @@ class _VideoPlayerState extends State<VideoPlayer> {
 
   @override
   Widget build(BuildContext context) {
-    double width = MediaQuery
-        .of(context)
-        .size
-        .width;
-    return Video(
-      height: width / (16 / 9),
+    final aspectRatio = videoController.player.state.videoParams.aspect ?? (16 / 9);
+    final screenSize = MediaQuery.sizeOf(context);
+    final video = Video(
+      aspectRatio: aspectRatio,
       controller: videoController
     );
+
+    if(isDesktop()) {
+      return Align(
+        alignment: Alignment.center,
+        child: SizedBox(
+          width: screenSize.width - 100,
+          height: screenSize.height - 100,
+          child: video,
+        ),
+      );
+    }
+
+    return video;
   }
 }

@@ -1,3 +1,4 @@
+import 'package:amphi/models/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -26,34 +27,16 @@ class _EditFolderDialogState extends ConsumerState<EditFilenameDialog> {
     return Dialog(
       child: SizedBox(
         width: 250,
-        height: 150,
+        height: 120,
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.end,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: TextField(
                 controller: controller,
                 decoration: InputDecoration(
-                    hintText: "name",
-                    focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(
-                            color: Theme
-                                .of(context)
-                                .colorScheme
-                                .primary,
-                            style: BorderStyle.solid,
-                            width: 2),
-                        borderRadius: BorderRadius.circular(8)
-                    ),
-                    border: OutlineInputBorder(
-                        borderSide: BorderSide(
-                            color: Theme
-                                .of(context)
-                                .scaffoldBackgroundColor,
-                            style: BorderStyle.solid),
-                        borderRadius: BorderRadius.circular(8)
-                    )
+                    hintText: AppLocalizations.of(context).get("name")
                 ),
               ),
             ),

@@ -9,6 +9,9 @@
   "file": "File",
   "folder": "Folder",
   "home": "Home",
+  "new_file": "New File",
+  "new_folder": "New Folder",
+  "name": "Name",
 
   "@register": "Register",
   "@login": "Login",

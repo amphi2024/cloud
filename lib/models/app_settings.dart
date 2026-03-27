@@ -30,9 +30,6 @@ class AppSettings {
   set transparentNavigationBar(value) => data["transparentNavigationBar"] = value;
   bool get transparentNavigationBar => data.putIfAbsent("transparentNavigationBar", () => false);
 
-  set useOwnServer(value) => data["useOwnServer"] = value;
-  bool get useOwnServer => data.putIfAbsent("useOwnServer", () => false);
-
   set serverAddress(value) => data["serverAddress"] = value;
   String get serverAddress => data.putIfAbsent("serverAddress", () => "");
 

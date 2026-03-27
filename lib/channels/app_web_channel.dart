@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:amphi/models/app_web_channel_core.dart';
 import 'package:amphi/models/update_event.dart';
@@ -46,6 +47,17 @@ class AppWebChannel extends AppWebChannelCore {
     }, onError: (d) {
       connected = false;
     }, cancelOnError: true);
+  }
+
+  @override
+  Future<void> getEvents({required void Function(Set<UpdateEvent>) onSuccess, void Function(int?)? onFailed}) async {
+    await super.getEvents(
+        onSuccess: onSuccess,
+        onFailed: (code) {
+          if (code == HttpStatus.unauthorized) {
+            appStorage.selectedUser.token = "";
+          }
+        });
   }
 
   Future<void> getFiles({required void Function(List<FileModel>) onSuccess, void Function(int?)? onFailed}) async {

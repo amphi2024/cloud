@@ -1,3 +1,4 @@
+import 'package:cloud/models/app_cache.dart';
 import 'package:cloud/models/file_model.dart';
 import 'package:cloud/models/fragment_index.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -131,3 +132,19 @@ class ShowingFileNotifier extends Notifier<FileModel?> {
     }
   }
 }
+
+class SidebarWidthNotifier extends Notifier<double> {
+  @override
+  double build() {
+    return appCacheData.sidebarWidth;
+  }
+
+  void set(double value) {
+    if(value <= 50 || value >= 500) {
+      return;
+    }
+    state = value;
+  }
+}
+
+final sidebarWidthProvider = NotifierProvider<SidebarWidthNotifier, double>(SidebarWidthNotifier.new);

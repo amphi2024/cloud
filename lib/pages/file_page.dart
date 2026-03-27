@@ -42,7 +42,11 @@ class FilePageState extends ConsumerState<FilePage> {
       ),
       body: Stack(
         children: [
-          Positioned.fill(child:  FileContent(fileModel: fileModel, iconSize: 50))
+          Positioned.fill(child: Hero(
+              tag: fileModel.id,
+              child: Material(
+                  color: Colors.transparent,
+                  child: FileContent(fileModel: fileModel, iconSize: 50))))
         ],
       ),
     );

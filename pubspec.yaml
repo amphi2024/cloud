@@ -55,12 +55,20 @@ dependencies:
   crypto: ^3.0.6
   share_plus: ^12.0.0
   syncfusion_flutter_pdfviewer: ^31.1.19
-
+  flutter_svg: ^2.2.3
   amphi:
-#    path: ../amphi
     git:
       url: https://github.com/amphi2024/flutter-shared
       ref: 231eced607a528ebf6c777ddc97c2ff8e9dee279
+
+  flutter_context_menu:
+    git:
+      url: https://github.com/siar1234/flutter_context_menu.git
+      ref: ab8533f65a1b3b2b40602b2d4d3d07b6f12cdb3f
+  desktop_listview:
+    git:
+      url: https://github.com/siar1234/desktop_listview.git
+      ref: 55a5b70f6518b416600653153ddb29d3baf8d47c
 
 dev_dependencies:
   flutter_test:
@@ -87,6 +95,7 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
     - assets/strings/
+    - assets/icons/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images

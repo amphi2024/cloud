@@ -1,4 +1,3 @@
-import 'package:amphi/models/app.dart';
 import 'package:amphi/models/app_localizations.dart';
 import 'package:amphi/widgets/dialogs/confirmation_dialog.dart';
 import 'package:cloud/channels/app_web_channel.dart';
@@ -7,6 +6,8 @@ import 'package:cloud/dialogs/select_folder_dialog.dart';
 import 'package:cloud/models/file_model.dart';
 import 'package:cloud/providers/files_provider.dart';
 import 'package:cloud/providers/providers.dart';
+import 'package:cloud/utils/delete_files.dart';
+import 'package:cloud/utils/screen_size.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -23,19 +24,20 @@ List<Widget> appbarActions({
   if (selectedItems != null) {
     switch (fragmentIndex) {
       case FragmentIndex.trash:
-        return trashSelectionAction(ref: ref, context: context);
+        return trashSelectionAction(ref: ref, context: context, selectedItems: selectedItems);
       default:
         return filesSelectionAction(
           ref: ref,
           context: context,
           currentFolder: currentFolder,
+          selectedItems: selectedItems
         );
     }
   }
 
   return [
     Visibility(
-      visible: App.isDesktop() || App.isWideScreen(context),
+      visible: isWideScreen(context),
       child: IconButton(
         onPressed: () {
           if (ref.read(searchKeywordProvider) == null) {
@@ -48,7 +50,7 @@ List<Widget> appbarActions({
       ),
     ),
     PopupMenuButton(
-      icon: Icon(Icons.more_vert_outlined),
+      icon: Icon(Icons.grid_view_rounded),
       itemBuilder: (context) {
         if (fragmentIndex == FragmentIndex.trash) {
           return mainPagePopupMenuItems(
@@ -82,6 +84,7 @@ List<Widget> filesSelectionAction({
   required WidgetRef ref,
   required BuildContext context,
   required FileModel currentFolder,
+  required List<String>? selectedItems
 }) {
   return [
     IconButton(
@@ -112,18 +115,7 @@ List<Widget> filesSelectionAction({
             return ConfirmationDialog(
               title: AppLocalizations.of(context).get("@dialog_title_move_to_trash_selected_files"),
               onConfirmed: () {
-                final list = ref.read(selectedFilesProvider)!;
-                for (var id in list) {
-                  var fileModel = ref.read(filesProvider).files.get(id);
-                  fileModel.deleted = DateTime.now();
-                  appWebChannel.updateFileInfo(fileModel: fileModel);
-                }
-                final currentFolder =
-                    ref.read(historyProvider.notifier).currentFolder();
-                ref
-                    .read(filesProvider.notifier)
-                    .moveFilesToTrash(currentFolder.id, list);
-                ref.read(selectedFilesProvider.notifier).endSelection();
+                moveSelectedFilesToTrash(ref: ref, selectedIds: selectedItems!.toSet());
               },
             );
           },
@@ -137,6 +129,7 @@ List<Widget> filesSelectionAction({
 List<Widget> trashSelectionAction({
   required WidgetRef ref,
   required BuildContext context,
+  required List<String>? selectedItems
 }) {
   return [
     IconButton(
@@ -153,15 +146,7 @@ List<Widget> trashSelectionAction({
             return ConfirmationDialog(
               title: AppLocalizations.of(context).get("@dialog_title_restore_selected_files"),
               onConfirmed: () {
-                final list = ref.read(selectedFilesProvider)!;
-                for (var id in list) {
-                  var fileModel = ref.read(filesProvider).files.get(id);
-                  fileModel.deleted = null;
-                  fileModel.parentId = "";
-                  appWebChannel.updateFileInfo(fileModel: fileModel);
-                }
-                ref.read(filesProvider.notifier).restoreFiles(list);
-                ref.read(selectedFilesProvider.notifier).endSelection();
+                restoreSelectedFiles(ref: ref, selectedIds: selectedItems!.toSet());
               },
             );
           },

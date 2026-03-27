@@ -1,9 +1,6 @@
-import 'package:amphi/models/app.dart';
 import 'package:cloud/components/file_grid_item.dart';
-import 'package:cloud/models/file_model.dart';
-import 'package:cloud/pages/file_page.dart';
-import 'package:cloud/pages/main_page.dart';
-import 'package:cloud/providers/providers.dart';
+import 'package:cloud/utils/on_file_pressed.dart';
+import 'package:cloud/utils/screen_size.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -27,30 +24,6 @@ class FilesViewState extends ConsumerState<FilesGridView> {
     ref.read(filesProvider.notifier).init();
   }
 
-  void onItemPressed(FileModel fileModel) {
-    if(fileModel.deleted != null) {
-      return;
-    }
-    if(fileModel.isFolder) {
-      if(App.isWideScreen(context) || App.isDesktop()) {
-        ref.read(historyProvider.notifier).insertHistory(fileModel);
-      }
-      else {
-        Navigator.push(context, CupertinoPageRoute(builder: (context) => MainPage(folder: fileModel)));
-      }
-    }
-    else {
-      if(App.isDesktop()) {
-        ref.read(showingFileProvider.notifier).toggleVisibility(fileModel);
-      }
-      else {
-        Navigator.push(context, MaterialPageRoute(
-          builder: (context) => FilePage(id: fileModel.id),
-        ));
-      }
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     final idList = widget.files;
@@ -69,7 +42,7 @@ class FilesViewState extends ConsumerState<FilesGridView> {
     }
 
     int axisCount = 2;
-    if(App.isWideScreen(context) || App.isDesktop()) {
+    if(isWideScreen(context)) {
       final itemSize = 175;
       axisCount = (MediaQuery.of(context).size.width / itemSize).toInt();
     }
@@ -88,11 +61,13 @@ class FilesViewState extends ConsumerState<FilesGridView> {
             crossAxisSpacing: 0,
           ),
           itemBuilder: (context, index) {
-            return FileGridItem(fileModel: files.get(idList[index]), onPressed: () {
-              if (ref.read(selectedFilesProvider) == null) {
-                onItemPressed(files.get(idList[index]));
-              }
-            });
+            final fileModel = files.get(idList[index]);
+            return Hero(
+              tag: fileModel.id,
+              child: FileGridItem(fileModel: fileModel, onPressed: () {
+                onFilePressed(fileModel: fileModel, context: context, ref: ref);
+              }),
+            );
           }),
     );
   }
