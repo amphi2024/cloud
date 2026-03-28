@@ -68,7 +68,7 @@ dependencies:
   desktop_listview:
     git:
       url: https://github.com/siar1234/desktop_listview.git
-      ref: 55a5b70f6518b416600653153ddb29d3baf8d47c
+      ref: be0e14c75c9d460feeff12461cfc2355e5f76f90
 
 dev_dependencies:
   flutter_test:

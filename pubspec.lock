@@ -182,8 +182,8 @@ packages:
     dependency: "direct main"
     description:
       path: "."
-      ref: "55a5b70f6518b416600653153ddb29d3baf8d47c"
-      resolved-ref: "55a5b70f6518b416600653153ddb29d3baf8d47c"
+      ref: be0e14c75c9d460feeff12461cfc2355e5f76f90
+      resolved-ref: be0e14c75c9d460feeff12461cfc2355e5f76f90
       url: "https://github.com/siar1234/desktop_listview.git"
     source: git
     version: "1.0.0"
