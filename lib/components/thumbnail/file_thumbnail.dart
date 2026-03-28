@@ -76,6 +76,15 @@ class FileThumbnail extends StatelessWidget {
           height: iconSize,
           child: Image.asset("assets/icons/pdf.png", cacheWidth: iconSize.toInt()),
         );
+      case "odt":
+      case "rtf":
+      case "doc":
+      case "docx":
+        return SizedBox(
+          width: iconSize,
+          height: iconSize,
+          child: Image.asset("assets/icons/word.png", cacheWidth: iconSize.toInt()),
+        );
       case "txt":
         return SizedBox(
           width: iconSize,
