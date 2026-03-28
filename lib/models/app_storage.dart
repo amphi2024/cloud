@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:amphi/models/app_storage_core.dart';
 import 'package:amphi/models/update_event.dart';
 import 'package:amphi/utils/path_utils.dart';
@@ -33,6 +35,11 @@ class AppStorage extends AppStorageCore {
         }
       });
     }
+  }
+
+  Future<void> clearTemporaryFiles() async {
+    final directory = Directory(PathUtils.join(selectedUser.storagePath, "tmp"));
+    await directory.delete(recursive: true);
   }
 
   Future<void> syncData(UpdateEvent updateEvent, WidgetRef ref) async {

@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:amphi/models/app_localizations.dart';
 import 'package:cloud/models/file_model.dart';
 import 'package:cloud/models/transfer_state.dart';
@@ -19,10 +17,8 @@ Future<void> exportFile({required FileModel fileModel, required BuildContext con
   );
 
   if(filePath != null) {
-    appWebChannel.downloadFileFromCloud(id: fileModel.id, onSuccess: (bytes) async {
+    appWebChannel.downloadFileFromCloud(id: fileModel.id, filePath: filePath, onSuccess: () async {
       ref.read(transfersProvider.notifier).removeItem(fileModel.id);
-      final file = File(filePath);
-      await file.writeAsBytes(bytes);
       if(context.mounted) {
         showToast(context, AppLocalizations.of(context).get("export_successful"));
       }

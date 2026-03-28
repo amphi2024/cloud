@@ -1,10 +1,10 @@
-import 'dart:convert';
+import 'dart:io';
 
 import 'package:amphi/models/app_localizations.dart';
-import 'package:cloud/components/thumbnail/file_thumbnail.dart';
 import 'package:cloud/utils/screen_size.dart';
 import 'package:cloud/views/desktop_text_file_view.dart';
 import 'package:flutter/material.dart';
+import 'package:percent_indicator/circular_percent_indicator.dart';
 
 import '../../channels/app_web_channel.dart';
 import '../../models/file_model.dart';
@@ -23,38 +23,44 @@ class TextFileContent extends StatefulWidget {
 class _TextFileContentState extends State<TextFileContent> {
 
   String? fileContent;
-  int received = 0;
-  int fileSize = 0;
+  int receivedBytes = 0;
+  int totalBytes = 0;
 
-  void init() {
-    appWebChannel.downloadFileFromCloud(
-      id: widget.fileModel.id,
-      onSuccess: (bytes) {
-        if(mounted) {
-          try {
+  Future<void> init() async {
+    final file = File(widget.fileModel.temporaryPath);
+    if(await file.exists()) {
+      final content = await file.readAsString();
+      if(mounted) {
+        setState(() {
+          fileContent = content;
+        });
+      }
+    }
+    else {
+      appWebChannel.downloadFileFromCloud(
+        id: widget.fileModel.id,
+        filePath: widget.fileModel.temporaryPath,
+        onSuccess: () async {
+          final content = await file.readAsString();
+          if(mounted) {
             setState(() {
-              fileContent = utf8.decode(bytes);
+              fileContent = content;
             });
           }
-          catch (e) {
+        },
+        onProgress: (receivedLength, length) {
+          if(mounted) {
             setState(() {
-              fileContent = null;
+              totalBytes = length;
+              receivedBytes = receivedLength;
             });
           }
-        }
-      },
-      onProgress: (receivedLength, length) {
-        if(mounted) {
-          setState(() {
-            fileSize = length;
-            received = receivedLength;
-          });
-        }
-      },
-      onFailed: (code) {
-        showToast(context, "${AppLocalizations.of(context).get("failed_load_file")}. Error code: $code");
-      },
-    );
+        },
+        onFailed: (code) {
+          showToast(context, "${AppLocalizations.of(context).get("failed_load_file")}. Error code: $code");
+        },
+      );
+    }
   }
 
   @override
@@ -73,7 +79,12 @@ class _TextFileContentState extends State<TextFileContent> {
   @override
   Widget build(BuildContext context) {
     if(fileContent == null) {
-      return Center(child: FileThumbnail(fileModel: widget.fileModel, iconSize: widget.iconSize));
+      return CircularPercentIndicator(
+          radius: 50,
+          lineWidth: 5,
+          animation: false,
+          percent: (receivedBytes / totalBytes).toDouble(),
+          progressColor: Theme.of(context).highlightColor);
     }
     else {
       final result = SingleChildScrollView(

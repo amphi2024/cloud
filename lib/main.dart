@@ -25,6 +25,7 @@ void main() async {
 
   await appCacheData.getData();
   await appStorage.initialize();
+  appStorage.clearTemporaryFiles();
   await appSettings.getData();
 
   runApp(const ProviderScope(child: MyApp()));

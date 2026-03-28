@@ -1,5 +1,7 @@
 import 'package:amphi/utils/file_name_utils.dart';
+import 'package:amphi/utils/path_utils.dart';
 import 'package:cloud/models/app_settings.dart';
+import 'package:cloud/models/app_storage.dart';
 import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
 
@@ -58,6 +60,8 @@ class FileModel {
   }
 
   String get fileExtension => FilenameUtils.extensionName(name);
+
+  String get temporaryPath => PathUtils.join(appStorage.selectedUser.storagePath, "tmp", id);
 
   bool isImage() {
     const imageExtensions = { "webp", "jpg", "jpeg", "png", "gif", "bmp", "tiff", "tif", "svg",

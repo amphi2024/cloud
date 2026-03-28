@@ -120,41 +120,12 @@ class AppWebChannel extends AppWebChannelCore {
     await postFile(url: "$serverAddress/cloud/files/$id/upload", filePath: filePath, onSuccess: onSuccess, onFailed: onFailed, onProgress: onProgress);
   }
 
-  Future<void> downloadFileFromCloud({required String id, required void Function(List<int>) onSuccess, void Function(int?)? onFailed, void Function(int, int)? onProgress}) async {
-    try {
-      final request = Request('GET', Uri.parse("$serverAddress/cloud/files/$id/download"));
-      request.headers.addAll({
-        'Content-Type': 'application/json; charset=UTF-8',
-        "Authorization": token,
-      });
-
-      final response = await Client().send(request);
-      List<int> data = [];
-      final contentLength = response.contentLength ?? 0;
-
-      response.stream.listen(
-            (chunk) {
-              data.addAll(chunk);
-          if (onProgress != null && contentLength != 0) {
-            onProgress(chunk.length, contentLength);
-          }
-        },
-        onDone: () async {
-          if (response.statusCode == 200) {
-            onSuccess(data);
-          }
-          else {
-            onFailed?.call(response.statusCode);
-          }
-        },
-        onError: (e) async {
-          onFailed?.call(null);
-        },
-        cancelOnError: true,
-      );
-    } catch (e) {
-      onFailed?.call(null);
+  Future<void> downloadFileFromCloud({required String id, required String filePath, required void Function() onSuccess, void Function(int?)? onFailed, void Function(int, int)? onProgress}) async {
+    final parent = File(filePath).parent;
+    if(!await parent.exists()) {
+      await parent.create(recursive: true);
     }
+    await downloadFile(url: "$serverAddress/cloud/files/$id/download", filePath: filePath, onSuccess: onSuccess, onFailed: onFailed, onProgress: onProgress);
   }
 
   Future<void> updateFileInfo({required FileModel fileModel, void Function()? onSuccess, void Function(int?)? onFailed}) async {
