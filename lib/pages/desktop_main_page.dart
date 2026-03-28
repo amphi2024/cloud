@@ -176,12 +176,20 @@ class WideMainPageState extends ConsumerState<DesktopMainPage> {
                       );
                     },
                     onKeyEvent: (keyEvent) {
-                      if (controller.ctrlPressed && keyEvent.physicalKey == PhysicalKeyboardKey.keyA) {
-                        if (keyEvent.physicalKey == PhysicalKeyboardKey.keyA) {
-                          controller.addAll(idList);
-                        }
-                        if (keyEvent.physicalKey == PhysicalKeyboardKey.keyT) {
-                          //TODO: implement multiple tap
+                      if (controller.ctrlPressed) {
+                        switch(keyEvent.physicalKey) {
+                          case PhysicalKeyboardKey.keyA:
+                            controller.addAll(idList);
+                            break;
+                          // case PhysicalKeyboardKey.minus:
+                          //
+                          //   break;
+                          // case PhysicalKeyboardKey.equal:
+                          //
+                          //   break;
+                          case PhysicalKeyboardKey.keyT:
+                            //TODO: implement multiple tap
+                            break;
                         }
                       }
                     },
