@@ -70,6 +70,12 @@ class FileThumbnail extends StatelessWidget {
       case "vob":
       case "ts":
         return VideoThumbnail(fileModel: fileModel, iconSize: iconSize);
+      case "pdf":
+        return SizedBox(
+          width: iconSize,
+          height: iconSize,
+          child: Image.asset("assets/icons/pdf.png", cacheWidth: iconSize.toInt()),
+        );
       case "txt":
         return SizedBox(
           width: iconSize,
