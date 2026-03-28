@@ -114,25 +114,6 @@ class SelectedFilesNotifier extends Notifier<List<String>?> {
 
 final selectedFilesProvider = NotifierProvider<SelectedFilesNotifier, List<String>?>(SelectedFilesNotifier.new);
 
-final showingFileProvider = NotifierProvider<ShowingFileNotifier, FileModel?>(ShowingFileNotifier.new);
-
-class ShowingFileNotifier extends Notifier<FileModel?> {
-
-  @override
-  FileModel? build() {
-    return null;
-  }
-
-  void toggleVisibility(FileModel fileModel) {
-    if(state?.id == fileModel.id) {
-      state = null;
-    }
-    else {
-      state = fileModel;
-    }
-  }
-}
-
 class SidebarWidthNotifier extends Notifier<double> {
   @override
   double build() {

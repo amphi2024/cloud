@@ -16,8 +16,7 @@ List<Widget> appbarActions({
   required int fragmentIndex,
   required FileModel currentFolder,
   required List<String>? selectedItems,
-  required WidgetRef ref,
-  FileModel? showingFile,
+  required WidgetRef ref
 }) {
   if (selectedItems != null) {
     switch (fragmentIndex) {
@@ -54,23 +53,20 @@ List<Widget> appbarActions({
           return mainPagePopupMenuItems(
             context: context,
             ref: ref,
-            sortOptionId: "!TRASH",
-            showingFile: showingFile,
+            sortOptionId: "!TRASH"
           );
         } else if (currentFolder.id.isEmpty) {
           return mainPagePopupMenuItems(
             context: context,
             ref: ref,
-            sortOptionId: "!FILES",
-            showingFile: showingFile,
+            sortOptionId: "!FILES"
           );
         } else {
           return mainPagePopupMenuItems(
             context: context,
             ref: ref,
             sortOptionId: currentFolder.id,
-            folder: currentFolder,
-            showingFile: showingFile,
+            folder: currentFolder
           );
         }
       },

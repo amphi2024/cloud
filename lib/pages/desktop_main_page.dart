@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:amphi/models/app_localizations.dart';
 import 'package:amphi/widgets/dialogs/confirmation_dialog.dart';
 import 'package:bitsdojo_window/bitsdojo_window.dart';
-import 'package:cloud/components/content/file_content.dart';
 import 'package:cloud/utils/delete_files.dart';
 import 'package:cloud/utils/export_file.dart';
 import 'package:cloud/views/files/desktop_file_grid_item.dart';
@@ -44,8 +43,6 @@ class WideMainPageState extends ConsumerState<DesktopMainPage> {
   Widget build(BuildContext context) {
     final controller = ref.watch(desktopListviewControllerProvider);
     final fragmentIndex = ref.watch(fragmentIndexProvider);
-    final showingFile = ref.watch(showingFileProvider);
-    double showingFileWidth = MediaQuery.of(context).size.width - 450;
     final currentFolder = ref.watch(historyProvider).lastOrNull ?? FileModel(id: "");
     final selectedItems = ref.watch(selectedFilesProvider);
     final actions = appbarActions(
@@ -53,8 +50,7 @@ class WideMainPageState extends ConsumerState<DesktopMainPage> {
       fragmentIndex: fragmentIndex,
       currentFolder: currentFolder,
       selectedItems: selectedItems,
-      ref: ref,
-      showingFile: showingFile,
+      ref: ref
     );
 
     final colors = CustomWindowButtonColors(
@@ -68,7 +64,7 @@ class WideMainPageState extends ConsumerState<DesktopMainPage> {
 
     final filesState = ref.watch(filesProvider);
     final files = filesState.files;
-    final currentFolderId = ref.read(historyProvider.notifier).currentFolder().id;
+    final currentFolderId = currentFolder.id;
     final idList =
         fragmentIndex == FragmentIndex.trash
             ? filesState.trash
@@ -103,9 +99,9 @@ class WideMainPageState extends ConsumerState<DesktopMainPage> {
                           icon: Icon(Icons.arrow_back_ios_new, color: ref.read(historyProvider).length > 1 ? null : Theme.of(context).disabledColor),
                         ),
                       ),
-                      if (Platform.isWindows || Platform.isMacOS) Expanded(child: SizedBox(height: desktopTitleBarHeight, child: MoveWindow())),
+                      Expanded(child: SizedBox(height: desktopTitleBarHeight, child: MoveWindow())),
                       HistoryBar(),
-                      if (Platform.isWindows || Platform.isMacOS) Expanded(child: SizedBox(height: desktopTitleBarHeight, child: MoveWindow())),
+                      Expanded(child: SizedBox(height: desktopTitleBarHeight, child: MoveWindow())),
                       Row(
                         children: [
                           ...actions,
@@ -314,15 +310,7 @@ class WideMainPageState extends ConsumerState<DesktopMainPage> {
                 ),
               ],
             ),
-          ),
-          if (showingFile != null) ...[
-            Positioned(
-              top: desktopTitleBarHeight + MediaQuery.of(context).padding.top,
-              bottom: 0,
-              right: 0,
-              child: SizedBox(width: showingFileWidth, child: FileContent(fileModel: showingFile, iconSize: 100)),
-            ),
-          ],
+          )
         ],
       ),
     );
