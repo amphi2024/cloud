@@ -1,6 +1,5 @@
 import 'package:cloud/views/files/file_grid_item.dart';
 import 'package:cloud/utils/on_file_pressed.dart';
-import 'package:cloud/utils/screen_size.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -38,15 +37,6 @@ class FilesViewState extends ConsumerState<FilesGridView> {
           ],
         ),
       );
-    }
-
-    int axisCount = 2;
-    if(isWideScreen(context)) {
-      final itemSize = 175;
-      axisCount = (MediaQuery.of(context).size.width / itemSize).toInt();
-    }
-    if (axisCount < 1) {
-      axisCount = 1;
     }
 
     return RefreshIndicator(
