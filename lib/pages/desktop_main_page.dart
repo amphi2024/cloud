@@ -39,7 +39,6 @@ class DesktopMainPage extends ConsumerStatefulWidget {
 }
 
 class WideMainPageState extends ConsumerState<DesktopMainPage> {
-
   @override
   Widget build(BuildContext context) {
     final controller = ref.watch(desktopListviewControllerProvider);
@@ -69,7 +68,10 @@ class WideMainPageState extends ConsumerState<DesktopMainPage> {
     final filesState = ref.watch(filesProvider);
     final files = filesState.files;
     final currentFolderId = ref.read(historyProvider.notifier).currentFolder().id;
-    final idList = fragmentIndex == FragmentIndex.trash ? filesState.trash : filesState.idListByDirectoryId(currentFolder.id, filename: ref.watch(searchKeywordProvider));
+    final idList =
+        fragmentIndex == FragmentIndex.trash
+            ? filesState.trash
+            : filesState.idListByDirectoryId(currentFolder.id, filename: ref.watch(searchKeywordProvider));
     final sidebarWidth = ref.watch(sidebarWidthProvider);
 
     return Scaffold(
@@ -110,17 +112,17 @@ class WideMainPageState extends ConsumerState<DesktopMainPage> {
                             MinimizeCustomWindowButton(colors: colors),
                             appWindow.isMaximized
                                 ? RestoreCustomWindowButton(
-                              colors: colors,
-                              onPressed: () {
-                                appWindow.restore();
-                              },
-                            )
+                                  colors: colors,
+                                  onPressed: () {
+                                    appWindow.restore();
+                                  },
+                                )
                                 : MaximizeCustomWindowButton(
-                              colors: colors,
-                              onPressed: () {
-                                appWindow.maximize();
-                              },
-                            ),
+                                  colors: colors,
+                                  onPressed: () {
+                                    appWindow.maximize();
+                                  },
+                                ),
                             CloseCustomWindowButton(
                               colors: CustomWindowButtonColors(
                                 mouseOver: const Color(0xFFD32F2F),
@@ -146,13 +148,22 @@ class WideMainPageState extends ConsumerState<DesktopMainPage> {
                           position: details.globalPosition,
                           padding: EdgeInsets.zero,
                           entries: [
-                            TextMenuItem(label: Text(AppLocalizations.of(context).get("new_folder")), onSelected: (d) {
-                              showDialog(context: context, builder: (context) {
-                                return EditFilenameDialog(initialValue: "", onSave: (folderName) {
-                                  createFolder(folderName: folderName, parentFolderId: currentFolderId, ref: ref, context: context);
-                                });
-                              });
-                            }),
+                            TextMenuItem(
+                              label: Text(AppLocalizations.of(context).get("new_folder")),
+                              onSelected: (d) {
+                                showDialog(
+                                  context: context,
+                                  builder: (context) {
+                                    return EditFilenameDialog(
+                                      initialValue: "",
+                                      onSave: (folderName) {
+                                        createFolder(folderName: folderName, parentFolderId: currentFolderId, ref: ref, context: context);
+                                      },
+                                    );
+                                  },
+                                );
+                              },
+                            ),
                             TextMenuItem(
                               label: Text(AppLocalizations.of(context).get("new_file")),
                               onSelected: (d) {
@@ -164,8 +175,13 @@ class WideMainPageState extends ConsumerState<DesktopMainPage> {
                       );
                     },
                     onKeyEvent: (keyEvent) {
-                      if (controller.ctrlPressed && keyEvent.physicalKey == PhysicalKeyboardKey.keyT) {
-                        //TODO: implement multiple tap
+                      if (controller.ctrlPressed && keyEvent.physicalKey == PhysicalKeyboardKey.keyA) {
+                        if (keyEvent.physicalKey == PhysicalKeyboardKey.keyA) {
+                          controller.addAll(idList);
+                        }
+                        if (keyEvent.physicalKey == PhysicalKeyboardKey.keyT) {
+                          //TODO: implement multiple tap
+                        }
                       }
                     },
                     controller: controller,
@@ -181,53 +197,99 @@ class WideMainPageState extends ConsumerState<DesktopMainPage> {
                       return DesktopListviewItem(
                         id: idList[index],
                         controller: controller,
-                        dragFeedback: Material(
-                            color: Colors.transparent,
-                            child: FileThumbnail(fileModel: fileModel, iconSize: 50)),
+                        dragFeedback: Material(color: Colors.transparent, child: FileThumbnail(fileModel: fileModel, iconSize: 50)),
                         dragFeedbackOffset: Offset.zero,
                         onPressed: () {
                           onFilePressed(fileModel: fileModel, context: context, ref: ref);
                         },
                         onSecondaryTapUp: (details) {
-                          if(controller.selectedItems.isNotEmpty && fragmentIndex == FragmentIndex.trash) {
-                            showContextMenu(context, contextMenu: ContextMenu(position: details.globalPosition, entries: [
-                              TextMenuItem(label: Text(AppLocalizations.of(context).get("delete")), onSelected: (d) {
-                                showDialog(context: context, builder: (context) => ConfirmationDialog(title: AppLocalizations.of(context).get("@dialog_title_delete_selected_files"), onConfirmed: () {
-                                  permanentlyDeleteSelectedFiles(ref: ref, selectedIds: controller.selectedItems, desktopListviewController: controller);
-                                }));
-                              }),
-                              TextMenuItem(label: Text(AppLocalizations.of(context).get("restore")), onSelected: (d) {
-                                restoreSelectedFiles(ref: ref, selectedIds: controller.selectedItems, desktopListviewController: controller);
-                              })
-                            ]));
-                          }
-                          else {
-                            showContextMenu(context, contextMenu: ContextMenu(position: details.globalPosition, entries: [
-                              TextMenuItem(label: Text(AppLocalizations.of(context).get("details")), onSelected: (d) {
-                                showDialog(context: context, builder: (context) => FileDetailDialog(fileModel: fileModel));
-                              }),
-                              TextMenuItem(label: Text(AppLocalizations.of(context).get("rename")), onSelected: (d) {
-                                showDialog(context: context, builder: (context) {
-                                  return EditFilenameDialog(initialValue: fileModel.name, onSave: (folderName) {
-                                    fileModel.name = folderName;
-                                    fileModel.modified = DateTime.now();
-                                    appWebChannel.updateFileInfo(fileModel: fileModel, onSuccess: () {
-                                      ref.read(filesProvider.notifier).insertFile(fileModel);
-                                    });
-                                  });
-                                });
-                              })
-                            ]));
+                          if (controller.selectedItems.isNotEmpty && fragmentIndex == FragmentIndex.trash) {
+                            showContextMenu(
+                              context,
+                              contextMenu: ContextMenu(
+                                position: details.globalPosition,
+                                entries: [
+                                  TextMenuItem(
+                                    label: Text(AppLocalizations.of(context).get("delete")),
+                                    onSelected: (d) {
+                                      showDialog(
+                                        context: context,
+                                        builder:
+                                            (context) => ConfirmationDialog(
+                                              title: AppLocalizations.of(context).get("@dialog_title_delete_selected_files"),
+                                              onConfirmed: () {
+                                                permanentlyDeleteSelectedFiles(
+                                                  ref: ref,
+                                                  selectedIds: controller.selectedItems,
+                                                  desktopListviewController: controller,
+                                                );
+                                              },
+                                            ),
+                                      );
+                                    },
+                                  ),
+                                  TextMenuItem(
+                                    label: Text(AppLocalizations.of(context).get("restore")),
+                                    onSelected: (d) {
+                                      restoreSelectedFiles(ref: ref, selectedIds: controller.selectedItems, desktopListviewController: controller);
+                                    },
+                                  ),
+                                ],
+                              ),
+                            );
+                          } else {
+                            showContextMenu(
+                              context,
+                              contextMenu: ContextMenu(
+                                position: details.globalPosition,
+                                entries: [
+                                  TextMenuItem(
+                                    label: Text(AppLocalizations.of(context).get("details")),
+                                    onSelected: (d) {
+                                      showDialog(context: context, builder: (context) => FileDetailDialog(fileModel: fileModel));
+                                    },
+                                  ),
+                                  TextMenuItem(
+                                    label: Text(AppLocalizations.of(context).get("rename")),
+                                    onSelected: (d) {
+                                      showDialog(
+                                        context: context,
+                                        builder: (context) {
+                                          return EditFilenameDialog(
+                                            initialValue: fileModel.name,
+                                            onSave: (folderName) {
+                                              fileModel.name = folderName;
+                                              fileModel.modified = DateTime.now();
+                                              appWebChannel.updateFileInfo(
+                                                fileModel: fileModel,
+                                                onSuccess: () {
+                                                  ref.read(filesProvider.notifier).insertFile(fileModel);
+                                                },
+                                              );
+                                            },
+                                          );
+                                        },
+                                      );
+                                    },
+                                  ),
+                                ],
+                              ),
+                            );
                           }
                         },
                         child: DragTarget<Set<String>>(
                           onAcceptWithDetails: (details) {
-                            moveSelectedFiles(selectedIds: details.data, oldParentId: currentFolderId, ref: ref, files: files, parent: fileModel, desktopListviewController: controller);
+                            moveSelectedFiles(
+                              selectedIds: details.data,
+                              oldParentId: currentFolderId,
+                              ref: ref,
+                              files: files,
+                              parent: fileModel,
+                              desktopListviewController: controller,
+                            );
                           },
                           builder: (context, candidateData, rejectedData) {
-                            return Hero(
-                                tag: fileModel.id,
-                                child: DesktopFileGridItem(fileModel: fileModel));
+                            return Hero(tag: fileModel.id, child: DesktopFileGridItem(fileModel: fileModel));
                           },
                         ),
                       );
