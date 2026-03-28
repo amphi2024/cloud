@@ -1,4 +1,3 @@
-import 'dart:io';
 
 import 'package:amphi/models/app_localizations.dart';
 import 'package:cloud/dialogs/edit_filename_dialog.dart';
@@ -6,14 +5,12 @@ import 'package:cloud/dialogs/file_detail_dialog.dart';
 import 'package:cloud/models/file_model.dart';
 import 'package:cloud/models/sort_option.dart';
 import 'package:cloud/providers/files_provider.dart';
-import 'package:file_picker/file_picker.dart';
-import 'package:flutter/foundation.dart';
+import 'package:cloud/utils/export_file.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../channels/app_web_channel.dart';
 import '../models/app_cache.dart';
-import '../utils/toast.dart';
 
 List<PopupMenuItem> mainPagePopupMenuItems({
   required BuildContext context,
@@ -161,21 +158,8 @@ List<PopupMenuItem> filePagePopupMenuItems({required BuildContext context, requi
         });
       });
     }),
-    PopupMenuItem(child: Text(AppLocalizations.of(context).get("export")), onTap: () async {
-      final filePath = await FilePicker.platform.saveFile(
-          fileName: fileModel.name,
-          bytes: Uint8List.fromList([])
-      );
-
-      if(filePath != null) {
-        appWebChannel.downloadFileFromCloud(id: fileModel.id, onSuccess: (bytes) async {
-          final file = File(filePath);
-          await file.writeAsBytes(bytes);
-          if(context.mounted) {
-            showToast(context, AppLocalizations.of(context).get("export_successful"));
-          }
-        });
-      }
+    PopupMenuItem(child: Text(AppLocalizations.of(context).get("export")), onTap: () {
+      exportFile(fileModel: fileModel, context: context, ref: ref);
     })
   ];
 }

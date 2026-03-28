@@ -5,6 +5,7 @@ import 'package:amphi/widgets/dialogs/confirmation_dialog.dart';
 import 'package:bitsdojo_window/bitsdojo_window.dart';
 import 'package:cloud/components/content/file_content.dart';
 import 'package:cloud/utils/delete_files.dart';
+import 'package:cloud/utils/export_file.dart';
 import 'package:cloud/views/files/desktop_file_grid_item.dart';
 import 'package:cloud/components/thumbnail/file_thumbnail.dart';
 import 'package:cloud/components/history_bar.dart';
@@ -270,6 +271,13 @@ class WideMainPageState extends ConsumerState<DesktopMainPage> {
                                           );
                                         },
                                       );
+                                    },
+                                  ),
+                                  if(!fileModel.isFolder)
+                                  TextMenuItem(
+                                    label: Text(AppLocalizations.of(context).get("export")),
+                                    onSelected: (d) async {
+                                      exportFile(fileModel: fileModel, context: context, ref: ref);
                                     },
                                   ),
                                 ],
