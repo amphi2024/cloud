@@ -238,7 +238,7 @@ class _MenuItem extends StatelessWidget {
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Padding(padding: const EdgeInsets.only(left: 18.0, right: 8), child: Icon(icon, size: 18)),
+              Padding(padding: const EdgeInsets.only(left: 18.0, right: 8), child: Icon(icon, size: 18, color: Theme.of(context).highlightColor)),
               Expanded(child: Text(title, style: const TextStyle(fontSize: 16))),
             ],
           ),
