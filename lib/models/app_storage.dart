@@ -39,7 +39,9 @@ class AppStorage extends AppStorageCore {
 
   Future<void> clearTemporaryFiles() async {
     final directory = Directory(PathUtils.join(selectedUser.storagePath, "tmp"));
-    await directory.delete(recursive: true);
+    if(await directory.exists()) {
+      await directory.delete(recursive: true);
+    }
   }
 
   Future<void> syncData(UpdateEvent updateEvent, WidgetRef ref) async {
