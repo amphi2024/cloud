@@ -42,8 +42,10 @@ class WideMainPageState extends ConsumerState<DesktopMainPage> {
   @override
   Widget build(BuildContext context) {
     final controller = ref.watch(desktopListviewControllerProvider);
+    final searchKeyword = ref.watch(searchKeywordProvider);
     final fragmentIndex = ref.watch(fragmentIndexProvider);
-    final currentFolder = ref.watch(historyProvider).lastOrNull ?? FileModel(id: "");
+    final history = ref.watch(historyProvider);
+    final currentFolder = history.lastOrNull ?? FileModel(id: "");
     final selectedItems = ref.watch(selectedFilesProvider);
     final actions = appbarActions(
       context: context,
@@ -68,7 +70,7 @@ class WideMainPageState extends ConsumerState<DesktopMainPage> {
     final idList =
         fragmentIndex == FragmentIndex.trash
             ? filesState.trash
-            : filesState.idListByDirectoryId(currentFolder.id, filename: ref.watch(searchKeywordProvider));
+            : filesState.idListByDirectoryId(currentFolder.id, filename: searchKeyword);
     final sidebarWidth = ref.watch(sidebarWidthProvider);
 
     return Scaffold(
@@ -96,7 +98,7 @@ class WideMainPageState extends ConsumerState<DesktopMainPage> {
                               ref.read(historyProvider.notifier).pop();
                             }
                           },
-                          icon: Icon(Icons.arrow_back_ios_new, color: ref.read(historyProvider).length > 1 ? null : Theme.of(context).disabledColor),
+                          icon: Icon(Icons.arrow_back_ios_new, color: history.length > 1 ? null : Theme.of(context).disabledColor),
                         ),
                       ),
                       Expanded(child: SizedBox(height: desktopTitleBarHeight, child: MoveWindow())),
