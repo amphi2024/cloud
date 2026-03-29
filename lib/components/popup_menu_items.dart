@@ -6,10 +6,9 @@ import 'package:cloud/models/file_model.dart';
 import 'package:cloud/models/sort_option.dart';
 import 'package:cloud/providers/files_provider.dart';
 import 'package:cloud/utils/export_file.dart';
+import 'package:cloud/utils/file_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-import '../channels/app_web_channel.dart';
 import '../models/app_cache.dart';
 
 List<PopupMenuItem> mainPagePopupMenuItems({
@@ -90,11 +89,7 @@ List<PopupMenuItem> mainPagePopupMenuItems({
       PopupMenuItem(child: Text(AppLocalizations.of(context).get("rename")), onTap: () {
         showDialog(context: context, builder: (context) {
           return EditFilenameDialog(initialValue: folder.name, onSave: (folderName) {
-            folder.name = folderName;
-            folder.modified = DateTime.now();
-            appWebChannel.updateFileInfo(fileModel: folder, onSuccess: () {
-              ref.read(filesProvider.notifier).insertFile(folder);
-            });
+            renameFile(fileModel: folder, filename: folderName, ref: ref, context: context);
           });
         });
       }),
@@ -150,11 +145,7 @@ List<PopupMenuItem> filePagePopupMenuItems({required BuildContext context, requi
     PopupMenuItem(child: Text(AppLocalizations.of(context).get("rename")), onTap: () {
       showDialog(context: context, builder: (context) {
         return EditFilenameDialog(initialValue: fileModel.name, onSave: (filename) {
-          fileModel.name = filename;
-          fileModel.modified = DateTime.now();
-          appWebChannel.updateFileInfo(fileModel: fileModel, onSuccess: () {
-            ref.read(filesProvider.notifier).insertFile(fileModel);
-          });
+          renameFile(fileModel: fileModel, filename: filename, ref: ref, context: context);
         });
       });
     }),

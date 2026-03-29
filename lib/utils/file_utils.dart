@@ -71,3 +71,12 @@ void createFolder({required String folderName, required String parentFolderId, r
     showToast(context, AppLocalizations.of(context).get("failed_to_create_folder"));
   });
 }
+
+void renameFile({required FileModel fileModel, required String filename, required WidgetRef ref, required BuildContext context}) {
+  fileModel.name = filename;
+  fileModel.modified = DateTime.now();
+  appWebChannel.updateFileInfo(fileModel: fileModel, onSuccess: () {
+    ref.read(filesProvider.notifier).insertFile(fileModel);
+  });
+  //TODO: show toast when failed to rename the file
+}

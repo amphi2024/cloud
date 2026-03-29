@@ -22,7 +22,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_context_menu/flutter_context_menu.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../channels/app_web_channel.dart';
 import '../components/custom_window_button.dart';
 import '../components/sidebar.dart';
 import '../dialogs/edit_filename_dialog.dart';
@@ -265,14 +264,7 @@ class WideMainPageState extends ConsumerState<DesktopMainPage> {
                                           return EditFilenameDialog(
                                             initialValue: fileModel.name,
                                             onSave: (folderName) {
-                                              fileModel.name = folderName;
-                                              fileModel.modified = DateTime.now();
-                                              appWebChannel.updateFileInfo(
-                                                fileModel: fileModel,
-                                                onSuccess: () {
-                                                  ref.read(filesProvider.notifier).insertFile(fileModel);
-                                                },
-                                              );
+                                              renameFile(fileModel: fileModel, filename: folderName, ref: ref, context: context);
                                             },
                                           );
                                         },
