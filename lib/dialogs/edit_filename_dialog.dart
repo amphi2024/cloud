@@ -40,20 +40,17 @@ class _EditFolderDialogState extends ConsumerState<EditFilenameDialog> {
                 ),
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  IconButton(onPressed: () {
-                    Navigator.pop(context);
-                  }, icon: Icon(Icons.cancel_outlined, size: 20,)),
-                  IconButton(onPressed: () {
-                    widget.onSave(controller.text);
-                    Navigator.pop(context);
-                  }, icon: Icon(Icons.check_circle_outline, size: 20,))
-                ],
-              ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                IconButton(onPressed: () {
+                  Navigator.pop(context);
+                }, icon: Icon(Icons.cancel_outlined, size: 20,)),
+                IconButton(onPressed: () {
+                  widget.onSave(controller.text);
+                  Navigator.pop(context);
+                }, icon: Icon(Icons.check_circle_outline, size: 20,))
+              ],
             )
           ],
         ),
