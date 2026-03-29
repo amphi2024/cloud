@@ -47,6 +47,7 @@ List<Widget> appbarActions({
       ),
     ),
     PopupMenuButton(
+      tooltip: "",
       icon: Icon(Icons.grid_view_rounded),
       itemBuilder: (context) {
         if (fragmentIndex == FragmentIndex.trash) {
