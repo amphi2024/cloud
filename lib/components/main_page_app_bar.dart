@@ -33,19 +33,17 @@ List<Widget> appbarActions({
   }
 
   return [
-    Visibility(
-      visible: isWideScreen(context),
-      child: IconButton(
-        onPressed: () {
-          if (ref.read(searchKeywordProvider) == null) {
-            ref.read(searchKeywordProvider.notifier).startSearch();
-          } else {
-            ref.read(searchKeywordProvider.notifier).endSearch();
-          }
-        },
-        icon: Icon(Icons.search),
-      ),
-    ),
+    // IconButton(
+    //   onPressed: () {
+    //     if (ref.read(searchKeywordProvider) == null) {
+    //       ref.read(searchKeywordProvider.notifier).startSearch();
+    //     } else {
+    //       ref.read(searchKeywordProvider.notifier).endSearch();
+    //     }
+    //   },
+    //   icon: Icon(Icons.search),
+    // ),
+    _SearchButton(),
     PopupMenuButton(
       tooltip: "",
       icon: Icon(Icons.grid_view_rounded),
@@ -166,4 +164,78 @@ List<Widget> trashSelectionAction({
       icon: Icon(Icons.delete),
     ),
   ];
+}
+
+class _SearchButton extends ConsumerWidget {
+  const _SearchButton();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final searchKeyword = ref.watch(searchKeywordProvider);
+    final isTablet_ = isWideScreen(context);
+
+    if(isDesktop() || (searchKeyword == null && isTablet_)) {
+      return IconButton(
+        onPressed: () {
+          if (ref.read(searchKeywordProvider) == null) {
+            ref.read(searchKeywordProvider.notifier).startSearch();
+          } else {
+            ref.read(searchKeywordProvider.notifier).endSearch();
+          }
+        },
+        icon: Icon(Icons.search),
+      );
+    }
+
+    if(isTablet_) {
+
+      final themeData = Theme.of(context);
+      return SizedBox(
+        width: 250,
+        height: 40,
+        child: TextField(
+          onChanged: (text) {
+            ref.read(searchKeywordProvider.notifier).setKeyword(text);
+          },
+          decoration: InputDecoration(
+            hintText: AppLocalizations.of(context).get("hint_search_files"),
+            prefixIcon: Icon(
+              Icons.search,
+              size: 15,
+              color: themeData.disabledColor,
+            ),
+            suffix: IconButton(
+                padding: EdgeInsets.zero,
+                onPressed: () {
+              ref.read(searchKeywordProvider.notifier).endSearch();
+            }, icon: Icon(Icons.cancel_outlined, size: 15)),
+            contentPadding: EdgeInsets.all(8),
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10),
+              borderSide: BorderSide(
+                  color: themeData.disabledColor,
+                  style: BorderStyle.solid,
+                  width: 1),
+            ),
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10),
+              borderSide: BorderSide(
+                  color: themeData.disabledColor,
+                  style: BorderStyle.solid,
+                  width: 1),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10),
+              borderSide: BorderSide(
+                  color: themeData.highlightColor,
+                  style: BorderStyle.solid,
+                  width: 2),
+            ),
+          ),
+        ),
+      );
+    }
+
+    return SizedBox.shrink();
+  }
 }

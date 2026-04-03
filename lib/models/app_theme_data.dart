@@ -73,7 +73,7 @@ class AppThemeData {
                   381
               ? Colors.grey.withOpacity(0.5)
               : Colors.black.withOpacity(0.5),
-      iconTheme: IconThemeData(color: isDesktopOrTablet(context) ? textColor.soften(brightness) : accentColor, size: 20),
+      iconTheme: IconThemeData(color: isDesktop() ? textColor.soften(brightness) : accentColor, size: 20),
       checkboxTheme: CheckboxThemeData(
         checkColor: WidgetStateProperty.resolveWith((states) {
           if (states.contains(WidgetState.selected)) {
