@@ -29,9 +29,14 @@ class _VideoPlayerState extends State<VideoPlayer> {
   @override
   void initState() {
     videoController = VideoController(player);
-    player.open(Media("${appWebChannel.serverAddress}/cloud/files/${widget.fileModel.id}/download", httpHeaders: {
-      "Authorization": appWebChannel.token
-    }), play: false);
+    if(widget.fileModel.isAvailableOffline) {
+      player.open(Media(widget.fileModel.offlinePath), play: false);
+    }
+    else {
+      player.open(Media("${appWebChannel.serverAddress}/cloud/files/${widget.fileModel.id}/download", httpHeaders: {
+        "Authorization": appWebChannel.token
+      }), play: false);
+    }
     super.initState();
   }
 

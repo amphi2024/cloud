@@ -30,6 +30,16 @@ class _TextFileContentState extends State<TextFileContent> {
   int totalBytes = 0;
 
   Future<void> init() async {
+    if(widget.fileModel.isAvailableOffline) {
+      final file = File(widget.fileModel.offlinePath);
+      final content = await file.readAsString();
+      if(mounted) {
+        setState(() {
+          fileContent = content;
+        });
+      }
+      return;
+    }
     final file = File(widget.fileModel.temporaryPath);
     if(await file.exists()) {
       final content = await file.readAsString();

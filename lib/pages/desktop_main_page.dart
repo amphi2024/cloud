@@ -271,13 +271,25 @@ class WideMainPageState extends ConsumerState<DesktopMainPage> {
                                       );
                                     },
                                   ),
-                                  if(!fileModel.isFolder)
-                                  TextMenuItem(
-                                    label: Text(AppLocalizations.of(context).get("export")),
-                                    onSelected: (d) async {
-                                      exportFile(fileModel: fileModel, context: context, ref: ref);
-                                    },
-                                  ),
+                                  if(!fileModel.isFolder) ... [
+                                    TextMenuItem(
+                                      label: Text(AppLocalizations.of(context).get("export")),
+                                      onSelected: (d) async {
+                                        exportFile(fileModel: fileModel, context: context, ref: ref);
+                                      },
+                                    ),
+                                    TextMenuItem(
+                                      label: Text(AppLocalizations.of(context).get(fileModel.isAvailableOffline ? "make_online_only" : "make_available_offline")),
+                                      onSelected: (d) async {
+                                        if(fileModel.isAvailableOffline) {
+                                          fileModel.removeDownload(ref: ref);
+                                        }
+                                        else {
+                                          fileModel.makeAvailableOnOffline(ref: ref);
+                                        }
+                                      },
+                                    ),
+                                  ]
                                 ],
                               ),
                             );

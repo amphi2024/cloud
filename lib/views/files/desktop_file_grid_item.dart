@@ -27,6 +27,15 @@ class DesktopFileGridItem extends StatelessWidget {
                           overflow: TextOverflow.ellipsis
                       )),
                 ),
+                if(!fileModel.isAvailableOffline) Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(right: 8.0),
+                      child: Icon(Icons.cloud),
+                    )
+                  ],
+                )
               ],
             ),
           ),

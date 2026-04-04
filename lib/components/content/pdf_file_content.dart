@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:amphi/models/app_localizations.dart';
 import 'package:cloud/models/file_model.dart';
 import 'package:cloud/utils/screen_size.dart';
@@ -18,7 +20,7 @@ class PdfFileContent extends StatelessWidget {
       return Text(AppLocalizations.of(context).get("message_file_too_large"));
     }
     else {
-      final result = SfPdfViewer.network(
+      final result = fileModel.isAvailableOffline ? SfPdfViewer.file(File(fileModel.offlinePath)) : SfPdfViewer.network(
         "${appWebChannel.serverAddress}/cloud/files/${fileModel.id}/download",
         headers: {
           "Authorization": appWebChannel.token

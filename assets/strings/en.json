@@ -90,5 +90,8 @@
   "export_successful": "File exported successfully",
   "hint_search_files": "Search files...",
   "failed_load_file": "Failed to load file",
-  "message_file_too_large": "This file is too large to display"
+  "message_file_too_large": "This file is too large to display",
+
+  "make_available_offline": "Make available offline",
+  "make_online_only": "Make online only"
 }

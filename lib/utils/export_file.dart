@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:amphi/models/app_localizations.dart';
 import 'package:cloud/models/file_model.dart';
 import 'package:cloud/models/transfer_state.dart';
@@ -17,13 +19,22 @@ Future<void> exportFile({required FileModel fileModel, required BuildContext con
   );
 
   if(filePath != null) {
-    appWebChannel.downloadFileFromCloud(id: fileModel.id, filePath: filePath, onSuccess: () async {
-      ref.read(transfersProvider.notifier).removeItem(fileModel.id);
+    if(fileModel.isAvailableOffline) {
+      final file = File(fileModel.offlinePath);
+      await file.copy(filePath);
       if(context.mounted) {
         showToast(context, AppLocalizations.of(context).get("export_successful"));
       }
-    }, onProgress: (transferred, total) {
-       ref.read(transfersProvider.notifier).insertItem(TransferState(fileId: fileModel.id, transferredBytes: transferred, totalBytes: total));
-    });
+    }
+    else {
+      appWebChannel.downloadFileFromCloud(id: fileModel.id, filePath: filePath, onSuccess: () async {
+        ref.read(transfersProvider.notifier).removeItem(fileModel.id);
+        if(context.mounted) {
+          showToast(context, AppLocalizations.of(context).get("export_successful"));
+        }
+      }, onProgress: (transferred, total) {
+        ref.read(transfersProvider.notifier).insertItem(TransferState(fileId: fileModel.id, transferredBytes: transferred, totalBytes: total));
+      });
+    }
   }
 }

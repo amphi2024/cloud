@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:cloud/components/thumbnail/default_thumbnail.dart';
 import 'package:cloud/components/thumbnail/video_thumbnail.dart';
 import 'package:flutter/material.dart';
@@ -48,7 +50,7 @@ class FileThumbnail extends StatelessWidget {
           width: iconSize,
           height: iconSize,
           child: Image(
-            image: NetworkImage("${appSettings.serverAddress}/cloud/files/${fileModel.id}/download", headers: {"Authorization": appWebChannel.token}),
+            image: fileModel.isAvailableOffline ? FileImage(File(fileModel.offlinePath)) : NetworkImage("${appSettings.serverAddress}/cloud/files/${fileModel.id}/download", headers: {"Authorization": appWebChannel.token}),
             fit: fit,
             errorBuilder: (context, error, stackTrace) => DefaultThumbnail(fileModel: fileModel, iconSize: iconSize)
           ),

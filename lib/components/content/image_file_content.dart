@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 
 import '../../channels/app_web_channel.dart';
@@ -13,7 +15,7 @@ class ImageFileContent extends StatelessWidget {
   Widget build(BuildContext context) {
     return InteractiveViewer(
       child: Image(
-        image: NetworkImage(
+        image: fileModel.isAvailableOffline ? FileImage(File(fileModel.offlinePath)) : NetworkImage(
           "${appSettings.serverAddress}/cloud/files/${fileModel.id}/download",
           headers: {"Authorization": appWebChannel.token},
         ),

@@ -32,6 +32,15 @@ class FileGridItem extends ConsumerWidget {
                     padding: const EdgeInsets.only(left: 8.0, right: 8, top: 15, bottom: 15),
                     child: Text(fileModel.name, softWrap: true, maxLines: 3, textAlign: TextAlign.center),
                   ),
+                  if(!fileModel.isAvailableOffline) Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(right: 8.0),
+                        child: Icon(Icons.cloud),
+                      )
+                    ],
+                  )
                 ],
               ),
             ),

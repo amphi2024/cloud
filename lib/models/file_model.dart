@@ -1,8 +1,14 @@
+import 'dart:io';
+
 import 'package:amphi/utils/file_name_utils.dart';
 import 'package:amphi/utils/path_utils.dart';
+import 'package:cloud/channels/app_web_channel.dart';
 import 'package:cloud/models/app_settings.dart';
 import 'package:cloud/models/app_storage.dart';
+import 'package:cloud/providers/files_provider.dart';
+import 'package:cloud/providers/transfers_provider.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 
 class FileModel {
@@ -10,7 +16,11 @@ class FileModel {
   String id;
   Map<String, dynamic> data;
 
-  FileModel({required this.id, Map<String, dynamic>? data}) : data = data ?? {};
+  FileModel({required this.id, Map<String, dynamic>? data}) : data = data ?? {} {
+    if(id.length > 2) {
+      isAvailableOffline = File(offlinePath).existsSync();
+    }
+  }
 
   String get name => data["name"] ?? "";
   set name(String value) => data["name"] = value;
@@ -63,6 +73,11 @@ class FileModel {
 
   String get temporaryPath => PathUtils.join(appStorage.selectedUser.storagePath, "tmp", id);
 
+  //TODO: Make it customizable in settings
+  String get offlinePath => PathUtils.join(appStorage.selectedUser.storagePath, "files", id[0], id[1], id, name);
+
+  bool isAvailableOffline = false;
+
   bool isImage() {
     const imageExtensions = { "webp", "jpg", "jpeg", "png", "gif", "bmp", "tiff", "tif", "svg",
       "ico", "heic", "heif", "jfif", "pjpeg", "pjp", "avif",
@@ -83,6 +98,21 @@ class FileModel {
     else {
       return id;
     }
+  }
+
+  Future<void> removeDownload({required WidgetRef ref}) async {
+    final file = File(offlinePath);
+    await file.delete();
+    isAvailableOffline = false;
+    ref.read(filesProvider.notifier).insertFile(this);
+  }
+
+  Future<void> makeAvailableOnOffline({required WidgetRef ref}) async {
+    appWebChannel.downloadFileFromCloud(id: id, filePath: offlinePath, onSuccess: () {
+      ref.read(transfersProvider.notifier).removeItem(id);
+      isAvailableOffline = true;
+      ref.read(filesProvider.notifier).insertFile(this);
+    });
   }
 
 }
