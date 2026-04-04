@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:amphi/models/app_localizations.dart';
+import 'package:cloud/models/fragment_index.dart';
 import 'package:cloud/providers/files_provider.dart';
 import 'package:cloud/providers/providers.dart';
 import 'package:cloud/utils/move_files.dart';
@@ -69,6 +70,26 @@ class _History extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     List<Widget> children = [];
     final history = ref.watch(historyProvider);
+    final fragmentIndex = ref.watch(fragmentIndexProvider);
+    
+    if(fragmentIndex == FragmentIndex.trash) {
+      return Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Row(
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(right: 8.0),
+              child: Icon(Icons.delete, color: Theme
+                  .of(context)
+                  .textTheme
+                  .bodyMedium
+                  ?.color),
+            ),
+            Text(AppLocalizations.of(context).get("@trash"))
+          ],
+        ),
+      );
+    }
 
     children.add(_Home());
 
@@ -83,6 +104,7 @@ class _History extends ConsumerWidget {
       );
       children.add(_Item(folder: history[i], index: i));
     }
+    
     return Row(
       children: children,
     );
