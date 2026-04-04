@@ -16,16 +16,7 @@ class AppStorage extends AppStorageCore {
   static final AppStorage _instance = AppStorage._internal();
   AppStorage._internal();
 
-  late String themesPath;
   static AppStorage getInstance() => _instance;
-
-  @override
-  void initPaths() {
-    super.initPaths();
-    themesPath = PathUtils.join(selectedUser.storagePath, "themes");
-
-    createDirectoryIfNotExists(themesPath);
-  }
 
   Future<void> syncDataFromEvents(WidgetRef ref) async {
     if (appWebChannel.token.isNotEmpty) {
