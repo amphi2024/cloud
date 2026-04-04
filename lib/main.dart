@@ -104,7 +104,7 @@ class MyAppState extends ConsumerState<MyApp> with WidgetsBindingObserver {
         GlobalCupertinoLocalizations.delegate,
       ],
       supportedLocales: AppLocalizations.supportedLocales,
-      home: isDesktop() ? const DesktopMainPage() : isWideScreen(context) ? TabletMainPage() : MainPage(folder: FileModel(id: "")),
+      home: isDesktop() ? const DesktopMainPage() : isWideScreen(context) ? const TabletMainPage() : MainPage(folder: FileModel(id: "")),
     );
   }
 }
