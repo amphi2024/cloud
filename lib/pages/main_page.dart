@@ -26,6 +26,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../channels/app_web_channel.dart';
 import '../models/app_cache.dart';
 import '../models/app_storage.dart';
+import '../utils/update_check.dart';
 
 final _floatingButtonCurve = Curves.easeOutQuint;
 
@@ -54,6 +55,8 @@ class MainPageState extends ConsumerState<MainPage> {
   @override
   void initState() {
     super.initState();
+    checkForAppUpdate(context);
+    checkForServerUpdate(context);
   }
 
   @override

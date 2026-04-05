@@ -93,5 +93,15 @@
   "message_file_too_large": "This file is too large to display",
 
   "make_available_offline": "Make available offline",
-  "make_online_only": "Make online only"
+  "make_online_only": "Make online only",
+
+  "automatically_check_updates": "Automatically check for updates",
+  "update_alert_title": "Update Available",
+  "update_alert_text": "A new version is available. Update now?",
+  "update_now": "Go to download",
+  "update_later": "I will do it manually",
+  "automatically_check_server_updates": "Automatically check for server updates",
+  "server_update_message": "New server version available. Update recommended."
+
+
 }

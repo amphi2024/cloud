@@ -13,6 +13,7 @@ import '../models/fragment_index.dart';
 import '../providers/files_provider.dart';
 import '../providers/providers.dart';
 import '../utils/file_utils.dart';
+import '../utils/update_check.dart';
 
 class TabletMainPage extends ConsumerStatefulWidget {
   const TabletMainPage({super.key});
@@ -29,6 +30,13 @@ class TabletMainPageState extends ConsumerState<TabletMainPage> {
   void dispose() {
     super.dispose();
     pageController.dispose();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    checkForAppUpdate(context);
+    checkForServerUpdate(context);
   }
 
   @override

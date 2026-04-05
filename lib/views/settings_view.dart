@@ -30,7 +30,24 @@ class _SettingsViewState extends State<SettingsView> {
                     appSettings.transparentNavigationBar = value!;
                   });
                 })),
-        ServerSettingComponent()
+        ServerSettingComponent(),
+        TitledCheckBox(
+            title: AppLocalizations.of(context).get("automatically_check_server_updates"),
+            value: appSettings.autoCheckServerUpdate,
+            onChanged: (value) {
+              setState(() {
+                appSettings.autoCheckServerUpdate = value;
+              });
+            }),
+        TitledCheckBox(
+            title: AppLocalizations.of(context).get("automatically_check_updates"),
+            value: appSettings.autoCheckUpdate,
+            onChanged: (value) {
+              setState(() {
+                appSettings.autoCheckUpdate = value;
+              });
+            }),
+        // const LinuxTitleBarSettings()
       ],
     );
   }

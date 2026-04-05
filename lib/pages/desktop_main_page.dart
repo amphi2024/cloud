@@ -27,6 +27,7 @@ import '../components/sidebar.dart';
 import '../dialogs/edit_filename_dialog.dart';
 import '../utils/file_utils.dart';
 import '../utils/on_file_pressed.dart';
+import '../utils/update_check.dart';
 
 const double desktopTitleBarHeight = 50;
 
@@ -38,6 +39,14 @@ class DesktopMainPage extends ConsumerStatefulWidget {
 }
 
 class WideMainPageState extends ConsumerState<DesktopMainPage> {
+
+  @override
+  void initState() {
+    super.initState();
+    checkForAppUpdate(context);
+    checkForServerUpdate(context);
+  }
+
   @override
   Widget build(BuildContext context) {
     final controller = ref.watch(desktopListviewControllerProvider);

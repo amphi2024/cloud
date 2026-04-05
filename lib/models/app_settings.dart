@@ -33,6 +33,21 @@ class AppSettings {
   set serverAddress(value) => data["serverAddress"] = value;
   String get serverAddress => data.putIfAbsent("serverAddress", () => "");
 
+  set autoCheckUpdate(bool value) => data["autoCheckUpdate"] = value;
+  bool get autoCheckUpdate => data["autoCheckUpdate"] ?? Platform.isWindows || Platform.isMacOS;
+
+  set autoCheckServerUpdate(bool value) => data["autoCheckServerUpdate"] = value;
+  bool get autoCheckServerUpdate => data["autoCheckServerUpdate"] ?? true;
+
+  // set windowButtonsOnLeft(bool value) => data["windowButtonsOnLeft"] = value;
+  // bool get windowButtonsOnLeft => data["windowButtonsOnLeft"] ?? false;
+  //
+  // set prefersCustomTitleBar(bool value) => data["prefersCustomTitleBar"] = value;
+  // bool get prefersCustomTitleBar => data["prefersCustomTitleBar"] ?? true;
+  //
+  // set selectedWindowButtonsTheme(String? value) => data["selectedWindowButtonsTheme"] = value;
+  // String? get selectedWindowButtonsTheme => data["selectedWindowButtonsTheme"];
+
   Future<void> getData() async {
     try {
       var file = File(appStorage.settingsPath);
