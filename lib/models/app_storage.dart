@@ -18,6 +18,8 @@ class AppStorage extends AppStorageCore {
 
   static AppStorage getInstance() => _instance;
 
+  String get databasePath => PathUtils.join(selectedUser.storagePath, "cloud.db");
+
   Future<void> syncDataFromEvents(WidgetRef ref) async {
     if (appWebChannel.token.isNotEmpty) {
       appWebChannel.getEvents(onSuccess: (updateEvents) async {

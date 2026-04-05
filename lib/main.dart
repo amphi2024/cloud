@@ -27,8 +27,13 @@ void main() async {
   await appStorage.initialize();
   appStorage.clearTemporaryFiles();
   await appSettings.getData();
+  final filesState = await FilesNotifier.cachedData();
 
-  runApp(const ProviderScope(child: MyApp()));
+  runApp(ProviderScope(
+      overrides: [
+        filesProvider.overrideWithBuild((ref, notifier) => filesState)
+      ],
+      child: MyApp()));
 
   if (Platform.isWindows || Platform.isMacOS) {
     doWhenWindowReady(() {
@@ -85,7 +90,7 @@ class MyAppState extends ConsumerState<MyApp> with WidgetsBindingObserver {
     }
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      ref.read(filesProvider.notifier).init();
+      //ref.read(filesProvider.notifier).init();
     });
   }
 

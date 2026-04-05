@@ -1,4 +1,5 @@
 import 'package:amphi/models/user.dart';
+import 'package:cloud/database/database_helper.dart';
 import 'package:cloud/providers/files_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -12,14 +13,16 @@ void onUserRemoved(WidgetRef ref) async {
   appStorage.initPaths();
   await appSettings.getData();
   appWebChannel.connectWebSocket();
-  ref.read(filesProvider.notifier).init();
+  await databaseHelper.notifySelectedUserChanged();
+  ref.read(filesProvider.notifier).rebuild();
 }
 
 void onUserAdded(WidgetRef ref) async {
   appWebChannel.disconnectWebSocket();
   appStorage.initPaths();
   await appSettings.getData();
-
+  await databaseHelper.notifySelectedUserChanged();
+  ref.read(filesProvider.notifier).rebuild();
 }
 
 void onUsernameChanged(WidgetRef ref) {
@@ -32,7 +35,8 @@ void onSelectedUserChanged(User user, WidgetRef ref) async {
   await appSettings.getData();
   appWebChannel.connectWebSocket();
 
-  ref.read(filesProvider.notifier).init();
+  await databaseHelper.notifySelectedUserChanged();
+  ref.read(filesProvider.notifier).rebuild();
 }
 
 void onLoggedIn({required String id, required String token, required String username, required BuildContext context,required WidgetRef ref}) async {
@@ -44,5 +48,6 @@ void onLoggedIn({required String id, required String token, required String user
   appStorage.selectedUser.name = username;
   appStorage.selectedUser.token = token;
   await appStorage.saveSelectedUserInformation();
-  ref.read(filesProvider.notifier).init();
+  await databaseHelper.notifySelectedUserChanged();
+  ref.read(filesProvider.notifier).rebuild();
 }

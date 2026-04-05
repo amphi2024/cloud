@@ -19,7 +19,7 @@ class FilesViewState extends ConsumerState<FilesGridView> {
 
   Future<void> refresh() async {
     await Future.delayed(const Duration(milliseconds: 1500));
-    ref.read(filesProvider.notifier).init();
+    ref.read(filesProvider.notifier).loadFiles();
   }
 
   @override

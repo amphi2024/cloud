@@ -1,5 +1,7 @@
+import 'package:cloud/database/database_helper.dart';
 import 'package:cloud/models/file_model.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:sqflite/sqflite.dart';
 import '../channels/app_web_channel.dart';
 import '../models/app_cache.dart';
 import '../models/sort_option.dart';
@@ -33,6 +35,33 @@ class FilesNotifier extends Notifier<FilesState> {
   @override
   FilesState build() {
     return FilesState({}, {}, []);
+  }
+
+  static Future<FilesState> cachedData() async {
+    final database = await databaseHelper.database;
+    final list = await database.query("files");
+    final Map<String, List<String>> idLists = {};
+    final List<String> trashIds = [];
+    final Map<String, FileModel> files = {};
+
+    for(var data in list) {
+      final id = data["id"];
+      if(id is String) {
+        final fileModel = FileModel(id: id, data: data);
+        if(fileModel.deleted != null) {
+          trashIds.add(fileModel.id);
+        }
+        else {
+          idLists.putIfAbsent(fileModel.parentId, () => []).add(fileModel.id);
+        }
+        files[fileModel.id] = fileModel;
+      }
+    }
+
+    trashIds.sortFiles(appCacheData.sortOption("!TRASH"), files);
+    idLists.forEach((folderId, idList) => idList.sortFiles(appCacheData.sortOption(folderId.isEmpty ? "!FILES" : folderId), files));
+
+    return FilesState(files, idLists, trashIds);
   }
 
   void insertFile(FileModel fileModel) {
@@ -113,12 +142,16 @@ class FilesNotifier extends Notifier<FilesState> {
     state = FilesState({...state.files}, {...state.idLists}, trash);
   }
 
-  void init() {
-    appWebChannel.getFiles(onSuccess: (list) {
+  Future<void> loadFiles({void Function(int? code)? onFailed}) async {
+    appWebChannel.getFiles(onSuccess: (list) async {
+      final database = await databaseHelper.database;
+      final batch = database.batch();
+
       final Map<String, FileModel> files = {};
       final Map<String, List<String>> idLists = {};
       final List<String> trash = [];
       for(var item in list) {
+        batch.insert("files", item.data, conflictAlgorithm: ConflictAlgorithm.replace);
         files[item.id] = item;
         if(item.deleted != null) {
           trash.add(item.id);
@@ -136,13 +169,19 @@ class FilesNotifier extends Notifier<FilesState> {
         }
       });
 
+      trash.sortFiles(appCacheData.sortOption("!TRASH"), files);
+
+      await batch.commit();
       state = FilesState(files, idLists, trash);
     }, onFailed: (code) {
+      onFailed?.call(code);
     });
   }
 
   Future<void> rebuild() async {
-
+    loadFiles(onFailed: (code) async {
+      state = await cachedData();
+    });
   }
 
 }
