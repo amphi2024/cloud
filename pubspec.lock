@@ -13,9 +13,9 @@ packages:
     dependency: "direct main"
     description:
       path: "."
-      ref: "231eced607a528ebf6c777ddc97c2ff8e9dee279"
-      resolved-ref: "231eced607a528ebf6c777ddc97c2ff8e9dee279"
-      url: "https://github.com/amphi2024/flutter-shared"
+      ref: d938b8bee2fd3b4ebf2a81f905ed5385ab3314b2
+      resolved-ref: d938b8bee2fd3b4ebf2a81f905ed5385ab3314b2
+      url: "https://github.com/amphi2024/flutter-shared.git"
     source: git
     version: "2.3.0"
   analyzer:
@@ -306,10 +306,10 @@ packages:
     dependency: "direct main"
     description:
       name: flutter_svg
-      sha256: "87fbd7c534435b6c5d9d98b01e1fd527812b82e68ddd8bd35fc45ed0fa8f0a95"
+      sha256: "1ded017b39c8e15c8948ea855070a5ff8ff8b3d5e83f3446e02d6bb12add7ad9"
       url: "https://pub.dev"
     source: hosted
-    version: "2.2.3"
+    version: "2.2.4"
   flutter_test:
     dependency: "direct dev"
     description: flutter
@@ -440,6 +440,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "5.1.1"
+  linux_csd_buttons:
+    dependency: "direct main"
+    description:
+      name: linux_csd_buttons
+      sha256: "3cf0f5568b9640f2406ba9fbbde23278352200511663a781460b209240344def"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.1.1"
   logging:
     dependency: transitive
     description:

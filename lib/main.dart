@@ -2,12 +2,14 @@ import 'dart:io';
 import 'package:cloud/pages/main_page.dart';
 import 'package:cloud/pages/desktop_main_page.dart';
 import 'package:cloud/pages/tablet_main_page.dart';
+import 'package:cloud/providers/csd_themes_provider.dart';
 import 'package:cloud/providers/files_provider.dart';
 import 'package:cloud/utils/screen_size.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:media_kit/media_kit.dart';
 import 'package:amphi/models/app_localizations.dart';
+import 'package:window_manager/window_manager.dart';
 import 'channels/app_method_channel.dart';
 import 'channels/app_web_channel.dart';
 import 'models/app_cache.dart';
@@ -17,7 +19,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:bitsdojo_window/bitsdojo_window.dart';
 import 'models/file_model.dart';
 
-
+final mainScreenKey = GlobalKey<MyAppState>();
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -28,12 +30,31 @@ void main() async {
   appStorage.clearTemporaryFiles();
   await appSettings.getData();
   final filesState = await FilesNotifier.cachedData();
+  final csdThemesState = await CsdThemesNotifier.initialized();
+
+  if (Platform.isLinux) {
+    await windowManager.ensureInitialized();
+
+    WindowOptions windowOptions = WindowOptions(
+      size: Size(appCacheData.data["windowWidth"] ?? 1280, appCacheData.data["windowHeight"] ?? 720),
+      center: true,
+      backgroundColor: Colors.transparent,
+      skipTaskbar: false,
+      titleBarStyle: appSettings.prefersCustomTitleBar ? TitleBarStyle.hidden : TitleBarStyle.normal,
+    );
+    windowManager.waitUntilReadyToShow(windowOptions, () async {
+      await windowManager.show();
+      await windowManager.focus();
+    });
+  }
+
 
   runApp(ProviderScope(
       overrides: [
-        filesProvider.overrideWithBuild((ref, notifier) => filesState)
+        filesProvider.overrideWithBuild((ref, notifier) => filesState),
+        csdThemesProvider.overrideWithBuild((ref, notifier) => csdThemesState)
       ],
-      child: MyApp()));
+      child: MyApp(key: mainScreenKey)));
 
   if (Platform.isWindows || Platform.isMacOS) {
     doWhenWindowReady(() {

@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:amphi/models/app_localizations.dart';
 import 'package:amphi/widgets/dialogs/confirmation_dialog.dart';
+import 'package:amphi/widgets/window/adaptive_linux_window_buttons.dart';
 import 'package:bitsdojo_window/bitsdojo_window.dart';
 import 'package:cloud/utils/delete_files.dart';
 import 'package:cloud/utils/export_file.dart';
@@ -25,9 +26,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../components/custom_window_button.dart';
 import '../components/sidebar.dart';
 import '../dialogs/edit_filename_dialog.dart';
+import '../models/app_settings.dart';
+import '../providers/csd_themes_provider.dart';
 import '../utils/file_utils.dart';
 import '../utils/on_file_pressed.dart';
 import '../utils/update_check.dart';
+import '../utils/window_control.dart';
 
 const double desktopTitleBarHeight = 50;
 
@@ -62,6 +66,8 @@ class WideMainPageState extends ConsumerState<DesktopMainPage> {
       selectedItems: selectedItems,
       ref: ref
     );
+    final csdThemes = ref.watch(csdThemesProvider).themes;
+    final csdTheme = csdThemes[appSettings.selectedWindowButtonsTheme];
 
     final colors = CustomWindowButtonColors(
       iconMouseOver: Theme.of(context).textTheme.bodyMedium?.color,
@@ -140,6 +146,7 @@ class WideMainPageState extends ConsumerState<DesktopMainPage> {
                               ),
                             ),
                           ],
+                          if (Platform.isLinux && appSettings.prefersCustomTitleBar && !appSettings.windowButtonsOnLeft) AdaptiveLinuxWindowButtons(theme: csdTheme, padding: 4.5, onClose: saveWindowSize, windowButtonsOnLeft: false)
                         ],
                       ),
                     ],

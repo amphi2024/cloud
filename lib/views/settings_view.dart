@@ -5,6 +5,7 @@ import 'package:cloud/channels/app_method_channel.dart';
 import 'package:cloud/components/server_setting_component.dart';
 import 'package:flutter/material.dart';
 
+import '../components/linux_title_bar_settings.dart';
 import '../models/app_settings.dart';
 
 class SettingsView extends StatefulWidget {
@@ -47,7 +48,7 @@ class _SettingsViewState extends State<SettingsView> {
                 appSettings.autoCheckUpdate = value;
               });
             }),
-        // const LinuxTitleBarSettings()
+        const LinuxTitleBarSettings()
       ],
     );
   }

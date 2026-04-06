@@ -64,8 +64,9 @@ dependencies:
   url_launcher: ^6.3.2
   amphi:
     git:
-      url: https://github.com/amphi2024/flutter-shared
-      ref: 231eced607a528ebf6c777ddc97c2ff8e9dee279
+      url: https://github.com/amphi2024/flutter-shared.git
+      ref: d938b8bee2fd3b4ebf2a81f905ed5385ab3314b2
+  linux_csd_buttons: ^1.1.1
 
   flutter_context_menu:
     git:

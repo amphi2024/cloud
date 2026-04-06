@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:amphi/models/app_localizations.dart';
 import 'package:amphi/widgets/account/account_button.dart';
+import 'package:amphi/widgets/window/adaptive_linux_window_buttons.dart';
 import 'package:bitsdojo_window/bitsdojo_window.dart';
 import 'package:cloud/models/file_model.dart';
 import 'package:cloud/providers/desktop_listview_controller_provider.dart';
@@ -15,8 +18,10 @@ import '../models/app_cache.dart';
 import '../models/app_settings.dart';
 import '../models/app_storage.dart';
 import '../models/fragment_index.dart';
+import '../providers/csd_themes_provider.dart';
 import '../providers/providers.dart';
 import '../utils/account_utils.dart';
+import '../utils/window_control.dart';
 import '../views/settings_view.dart';
 
 class Sidebar extends ConsumerWidget {
@@ -32,6 +37,8 @@ class Sidebar extends ConsumerWidget {
     final desktopListviewController = ref.watch(desktopListviewControllerProvider);
     final fragmentIndex = ref.watch(fragmentIndexProvider);
     final width = ref.watch(sidebarWidthProvider);
+    final csdThemes = ref.watch(csdThemesProvider).themes;
+    final csdTheme = csdThemes[appSettings.selectedWindowButtonsTheme];
 
     return Container(
       width: width,
@@ -48,6 +55,8 @@ class Sidebar extends ConsumerWidget {
               children: [
                 Row(
                   children: [
+                    if (Platform.isLinux && appSettings.prefersCustomTitleBar && appSettings.windowButtonsOnLeft)
+                      AdaptiveLinuxWindowButtons(theme: csdTheme, padding: 4.5, onClose: saveWindowSize, windowButtonsOnLeft: true),
                     Expanded(child: SizedBox(height: 50, child: MoveWindow())),
                     AccountButton(
                       onLoggedIn: ({required id, required token, required username}) {
