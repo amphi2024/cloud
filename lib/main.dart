@@ -111,7 +111,7 @@ class MyAppState extends ConsumerState<MyApp> with WidgetsBindingObserver {
     }
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      //ref.read(filesProvider.notifier).init();
+      ref.read(filesProvider.notifier).loadFiles();
     });
   }
 
