@@ -38,18 +38,16 @@ class DatabaseHelper {
   Future<void> _onCreate(Database db, int version) async {
     await db.execute("""
                      CREATE TABLE IF NOT EXISTS files (
-                        id TEXT,
-                        name TEXT,
-                        parent_id TEXT,
-                        type TEXT,
-                        created INTEGER,
-                        modified INTEGER,
-                        uploaded INTEGER,
+                        id TEXT PRIMARY KEY NOT NULL,
+                        name TEXT NOT NULL,
+                        parent_id TEXT NOT NULL,
+                        type TEXT NOT NULL,
+                        created INTEGER NOT NULL,
+                        modified INTEGER NOT NULL,
+                        uploaded INTEGER NOT NULL,
                         deleted INTEGER,
-                        sha256 TEXT,
-                        size INTEGER,
-                        version INTEGER,
-                        PRIMARY KEY (id, version)
+                        sha256 TEXT NOT NULL,
+                        size INTEGER NOT NULL
                       );
                         """);
     await db.execute("""
