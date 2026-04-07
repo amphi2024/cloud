@@ -153,7 +153,12 @@ List<PopupMenuItem> filePagePopupMenuItems({required BuildContext context, requi
       exportFile(fileModel: fileModel, context: context, ref: ref);
     }),
     if(!fileModel.isFolder)  PopupMenuItem(child: Text(AppLocalizations.of(context).get(fileModel.isAvailableOffline ? "make_online_only" : "make_available_offline")), onTap: () {
-      exportFile(fileModel: fileModel, context: context, ref: ref);
+      if(fileModel.isAvailableOffline) {
+        fileModel.removeDownload(ref: ref);
+      }
+      else {
+        fileModel.makeAvailableOnOffline(ref: ref);
+      }
     }),
   ];
 }
