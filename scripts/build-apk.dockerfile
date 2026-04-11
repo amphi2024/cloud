@@ -45,7 +45,8 @@ RUN git checkout ${APP_VERSION} \
 && flutter precache --android \
 && flutter pub get \
 && flutter build apk \
-&& flutter build apk --split-per-abi
+&& flutter build apk --split-per-abi \
+&& flutter build appbundle
 
 RUN mkdir -p /tmp/build/amphi-cloud/result
 
@@ -54,7 +55,8 @@ WORKDIR /tmp/build/amphi-cloud
 RUN mv ./build/app/outputs/flutter-apk/app-release.apk ./result/Cloud-${APP_VERSION_DISPLAY}-Android.apk \
 && mv ./build/app/outputs/flutter-apk/app-armeabi-v7a-release.apk ./result/Cloud-${APP_VERSION_DISPLAY}-Android-armeabi_v7a.apk \
 && mv ./build/app/outputs/flutter-apk/app-x86_64-release.apk ./result/Cloud-${APP_VERSION_DISPLAY}-Android-x86_64.apk \
-&& mv ./build/app/outputs/flutter-apk/app-arm64-v8a-release.apk ./result/Cloud-${APP_VERSION_DISPLAY}-Android-arm64_v8a.apk
+&& mv ./build/app/outputs/flutter-apk/app-arm64-v8a-release.apk ./result/Cloud-${APP_VERSION_DISPLAY}-Android-arm64_v8a.apk \
+&& mv ./build/app/outputs/bundle/release/app-release.aab ./result/Photos-${APP_VERSION_DISPLAY}-Android.aab
 
 # docker build -f build-apk.dockerfile -t amphi-cloud-apk-builder .
 # docker create --name build-output-apk amphi-cloud-apk-builder
