@@ -5,6 +5,8 @@ import 'package:cloud/views/files/file_upload_progress.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../utils/trucate_text.dart';
+
 class FileGridItem extends ConsumerWidget {
   final void Function() onPressed;
   final FileModel fileModel;
@@ -30,17 +32,23 @@ class FileGridItem extends ConsumerWidget {
                   FileThumbnail(fileModel: fileModel, iconSize: 100, fit: BoxFit.cover),
                   Padding(
                     padding: const EdgeInsets.only(left: 8.0, right: 8, top: 15, bottom: 15),
-                    child: Text(fileModel.name, softWrap: true, maxLines: 3, textAlign: TextAlign.center),
+                    child: Text.rich(
+                      maxLines: 3,
+                      textAlign: TextAlign.center,
+                      overflow: TextOverflow.ellipsis,
+                      TextSpan(
+                        children: [
+                          TextSpan(text: truncateText(fileModel.name, 15)),
+                          if(!fileModel.isAvailableOffline) WidgetSpan(
+                            child: Padding(
+                              padding: const EdgeInsets.only(left: 5.0),
+                              child: Icon(Icons.cloud_download_outlined, size: Theme.of(context).textTheme.bodyMedium?.fontSize,),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
                   ),
-                  if(!fileModel.isAvailableOffline) Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(right: 8.0),
-                        child: Icon(Icons.cloud),
-                      )
-                    ],
-                  )
                 ],
               ),
             ),

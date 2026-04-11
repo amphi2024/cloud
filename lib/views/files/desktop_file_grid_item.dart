@@ -1,6 +1,7 @@
 import 'package:cloud/models/file_model.dart';
 import 'package:flutter/material.dart';
 import '../../components/thumbnail/file_thumbnail.dart';
+import '../../utils/trucate_text.dart';
 import 'file_upload_progress.dart';
 
 class DesktopFileGridItem extends StatelessWidget {
@@ -20,21 +21,22 @@ class DesktopFileGridItem extends StatelessWidget {
                 FileThumbnail(fileModel: fileModel, iconSize: 100, fit: BoxFit.contain),
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
-                  child: Text(
-                      fileModel.name,
-                      maxLines: 3, textAlign: TextAlign.center,
-                      style: TextStyle(
-                          overflow: TextOverflow.ellipsis
-                      )),
-                ),
-                if(!fileModel.isAvailableOffline) Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(right: 8.0),
-                      child: Icon(Icons.cloud),
-                    )
-                  ],
+                  child: Text.rich(
+                    maxLines: 3,
+                    textAlign: TextAlign.center,
+                    overflow: TextOverflow.ellipsis,
+                    TextSpan(
+                      children: [
+                        TextSpan(text: truncateText(fileModel.name, 15)),
+                        if(!fileModel.isAvailableOffline) WidgetSpan(
+                          child: Padding(
+                            padding: const EdgeInsets.only(left: 5.0),
+                            child: Icon(Icons.cloud_download_outlined, size: Theme.of(context).textTheme.bodyMedium?.fontSize,),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
                 )
               ],
             ),
