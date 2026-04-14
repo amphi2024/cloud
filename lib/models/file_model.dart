@@ -13,10 +13,16 @@ import 'package:intl/intl.dart';
 
 class FileModel {
 
-  String id;
+  String _id;
   Map<String, dynamic> data;
 
-  FileModel({required this.id, Map<String, dynamic>? data}) : data = data ?? {} {
+  set id(String value) {
+    _id = value;
+    offlinePath = PathUtils.join(appStorage.selectedUser.storagePath, "files", _id, _id, _id, name);
+  }
+  String get id => _id;
+
+  FileModel({required String id, Map<String, dynamic>? data}) : data = data ?? {}, _id = id {
     if(id.length > 2) {
       isAvailableOffline = File(offlinePath).existsSync();
     }
@@ -74,7 +80,7 @@ class FileModel {
   String get temporaryPath => PathUtils.join(appStorage.selectedUser.storagePath, "tmp", id);
 
   //TODO: Make it customizable in settings
-  String get offlinePath => PathUtils.join(appStorage.selectedUser.storagePath, "files", id[0], id[1], id, name);
+  String offlinePath = "";
 
   bool isAvailableOffline = false;
 

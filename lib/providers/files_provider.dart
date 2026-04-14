@@ -1,9 +1,13 @@
+import 'dart:io';
+
 import 'package:cloud/database/database_helper.dart';
 import 'package:cloud/models/file_model.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sqflite/sqflite.dart';
 import '../channels/app_web_channel.dart';
 import '../models/app_cache.dart';
+import '../models/app_settings.dart';
 import '../models/sort_option.dart';
 
 class FilesState {
@@ -60,6 +64,22 @@ class FilesNotifier extends Notifier<FilesState> {
 
     trashIds.sortFiles(appCacheData.sortOption("!TRASH"), files);
     idLists.forEach((folderId, idList) => idList.sortFiles(appCacheData.sortOption(folderId.isEmpty ? "!FILES" : folderId), files));
+
+    if(files.isEmpty && appSettings.serverAddress.isEmpty) {
+      final fileModel = FileModel(id: "WELCOME");
+      fileModel.name = "Welcome!.pdf";
+      final bytes = await rootBundle.load("assets/welcome.pdf");
+      final file = File(fileModel.temporaryPath);
+      final tempDirectory = file.parent;
+      if(!await tempDirectory.exists()) {
+        await tempDirectory.create(recursive: true);
+      }
+      await file.writeAsBytes(bytes.buffer.asUint8List());
+      fileModel.offlinePath = fileModel.temporaryPath;
+      fileModel.isAvailableOffline = true;
+      files[fileModel.id] = fileModel;
+      idLists.putIfAbsent(fileModel.parentId, () => []).add(fileModel.id);
+    }
 
     return FilesState(files, idLists, trashIds);
   }
