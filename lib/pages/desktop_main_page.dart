@@ -59,12 +59,15 @@ class WideMainPageState extends ConsumerState<DesktopMainPage> {
     final history = ref.watch(historyProvider);
     final currentFolder = history.lastOrNull ?? FileModel(id: "");
     final selectedItems = ref.watch(selectedFilesProvider);
+    final filesState = ref.watch(filesProvider);
+    final files = filesState.files;
     final actions = appbarActions(
       context: context,
       fragmentIndex: fragmentIndex,
       currentFolder: currentFolder,
       selectedItems: selectedItems,
-      ref: ref
+      ref: ref,
+      files: files
     );
     final csdThemes = ref.watch(csdThemesProvider).themes;
     final csdTheme = csdThemes[appSettings.selectedWindowButtonsTheme];
@@ -77,9 +80,6 @@ class WideMainPageState extends ConsumerState<DesktopMainPage> {
       iconMouseDown: Theme.of(context).textTheme.bodyMedium?.color,
       normal: Theme.of(context).scaffoldBackgroundColor,
     );
-
-    final filesState = ref.watch(filesProvider);
-    final files = filesState.files;
     final currentFolderId = currentFolder.id;
     final idList =
         fragmentIndex == FragmentIndex.trash

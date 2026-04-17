@@ -66,12 +66,13 @@ class MainPageState extends ConsumerState<MainPage> {
     final currentFolderId = widget.folder.id;
     double bottomPadding = 15;
     final selectedFiles = ref.watch(selectedFilesProvider);
+    final files = ref.watch(filesProvider).files;
 
     if(Platform.isAndroid && !appSettings.transparentNavigationBar) {
       bottomPadding = MediaQuery.of(context).padding.bottom;
     }
 
-    final actions = appbarActions(context: context, fragmentIndex: FragmentIndex.files, currentFolder: widget.folder, selectedItems: selectedFiles, ref: ref);
+    final actions = appbarActions(context: context, fragmentIndex: FragmentIndex.files, currentFolder: widget.folder, selectedItems: selectedFiles, ref: ref, files: files);
 
     return PopScope(
       canPop: selectedFiles == null && !searchBarShowing,

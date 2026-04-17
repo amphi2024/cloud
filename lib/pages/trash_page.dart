@@ -15,7 +15,7 @@ class TrashPage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
 
     final selectedFiles = ref.watch(selectedFilesProvider);
-    final actions = appbarActions(context: context, fragmentIndex: FragmentIndex.trash, currentFolder: FileModel(id: ""), selectedItems: selectedFiles, ref: ref);
+    final actions = appbarActions(context: context, fragmentIndex: FragmentIndex.trash, currentFolder: FileModel(id: ""), selectedItems: selectedFiles, ref: ref, files: {});
 
     return PopScope(
       canPop: selectedFiles == null,

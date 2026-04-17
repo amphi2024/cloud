@@ -159,6 +159,7 @@ class TabletMainPageState extends ConsumerState<TabletMainPage> {
                           currentFolder: currentFolder,
                           selectedItems: selectedItems,
                           ref: ref,
+                          files: filesState.files
                         ),
                         PopupMenuButton(
                           icon: Icon(Icons.add_circle_outline),

@@ -5,6 +5,7 @@ import 'package:cloud/dialogs/select_folder_dialog.dart';
 import 'package:cloud/models/file_model.dart';
 import 'package:cloud/providers/providers.dart';
 import 'package:cloud/utils/delete_files.dart';
+import 'package:cloud/utils/move_files.dart';
 import 'package:cloud/utils/screen_size.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -16,7 +17,8 @@ List<Widget> appbarActions({
   required int fragmentIndex,
   required FileModel currentFolder,
   required List<String>? selectedItems,
-  required WidgetRef ref
+  required WidgetRef ref,
+  required Map<String, FileModel> files
 }) {
   if (selectedItems != null) {
     switch (fragmentIndex) {
@@ -27,7 +29,8 @@ List<Widget> appbarActions({
           ref: ref,
           context: context,
           currentFolder: currentFolder,
-          selectedItems: selectedItems
+          selectedItems: selectedItems,
+          files: files
         );
     }
   }
@@ -77,7 +80,8 @@ List<Widget> filesSelectionAction({
   required WidgetRef ref,
   required BuildContext context,
   required FileModel currentFolder,
-  required List<String>? selectedItems
+  required List<String>? selectedItems,
+  required Map<String, FileModel> files
 }) {
   return [
     IconButton(
@@ -87,16 +91,19 @@ List<Widget> filesSelectionAction({
       icon: Icon(Icons.check_circle_outline),
     ),
     IconButton(
-      onPressed: () {
-        showDialog(
+      onPressed: () async {
+        final selectedFolder = await showDialog<FileModel?>(
           context: context,
           builder: (context) {
             return SelectFolderDialog(
-              excluding: ref.read(selectedFilesProvider)!,
+              excluding: selectedItems!,
               currentFolderId: currentFolder.id,
             );
           },
         );
+        if(selectedFolder != null) {
+          moveSelectedFiles(selectedIds: selectedItems!.toSet(), oldParentId: currentFolder.id, ref: ref, parent: selectedFolder, files: files);
+        }
       },
       icon: Icon(Icons.folder_copy),
     ),

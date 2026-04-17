@@ -1,5 +1,4 @@
 import 'package:cloud/providers/files_provider.dart';
-import 'package:cloud/providers/providers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -53,9 +52,7 @@ class _SelectFolderDialogState extends ConsumerState<SelectFolderDialog> {
                     Navigator.pop(context);
                   }, icon: Icon(Icons.cancel_outlined)),
                   IconButton(onPressed: () {
-                    ref.read(filesProvider.notifier).moveFiles(ref.read(selectedFilesProvider)!, widget.currentFolderId, history.last);
-                    ref.read(selectedFilesProvider.notifier).endSelection();
-                    Navigator.pop(context);
+                    Navigator.pop(context, "move");
                   }, icon: Icon(Icons.check_circle_outline)),
                 ],
               ),
