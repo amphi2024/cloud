@@ -6,7 +6,7 @@ import '../channels/app_web_channel.dart';
 import '../providers/files_provider.dart';
 
 void moveSelectedFiles({required Set<String> selectedIds, required String oldParentId, required WidgetRef ref, required FileModel parent, DesktopListviewController? desktopListviewController, required Map<String, FileModel> files}) {
-  if ((!parent.isFolder && parent.id.isNotEmpty) || parent.id == oldParentId) {
+  if ((!parent.isFolder && parent.id.isNotEmpty) || parent.id == oldParentId || selectedIds.contains(parent.id)) {
     return;
   }
   for(var id in selectedIds) {
