@@ -92,6 +92,14 @@ class MainPageState extends ConsumerState<MainPage> {
           toolbarHeight: 60,
           leading: Builder(
             builder: (context) {
+              if(selectedFiles != null) {
+                return IconButton(
+                  onPressed: () {
+                    ref.read(selectedFilesProvider.notifier).endSelection();
+                  },
+                  icon: Icon(Icons.check_circle_outline),
+                );
+              }
               return AccountButton(
                   onLoggedIn: ({required id, required token, required username}) {
                     onLoggedIn(id: id, token: token, username: username, context: context, ref: ref);

@@ -36,16 +36,6 @@ List<Widget> appbarActions({
   }
 
   return [
-    // IconButton(
-    //   onPressed: () {
-    //     if (ref.read(searchKeywordProvider) == null) {
-    //       ref.read(searchKeywordProvider.notifier).startSearch();
-    //     } else {
-    //       ref.read(searchKeywordProvider.notifier).endSearch();
-    //     }
-    //   },
-    //   icon: Icon(Icons.search),
-    // ),
     _SearchButton(),
     PopupMenuButton(
       tooltip: "",
@@ -84,12 +74,6 @@ List<Widget> filesSelectionAction({
   required Map<String, FileModel> files
 }) {
   return [
-    IconButton(
-      onPressed: () {
-        ref.read(selectedFilesProvider.notifier).endSelection();
-      },
-      icon: Icon(Icons.check_circle_outline),
-    ),
     IconButton(
       onPressed: () async {
         final selectedFolder = await showDialog<FileModel?>(

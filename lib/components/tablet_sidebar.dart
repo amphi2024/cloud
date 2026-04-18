@@ -22,6 +22,7 @@ class TabletSidebar extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final fragmentIndex = ref.watch(fragmentIndexProvider);
     final sidebarWidth = ref.watch(sidebarWidthProvider);
+    final selectedItems = ref.watch(selectedFilesProvider);
 
     return AnimatedPositioned(
       curve: Curves.easeOutQuint,
@@ -42,7 +43,12 @@ class TabletSidebar extends ConsumerWidget {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
-                        AccountButton(
+                        selectedItems != null ? IconButton(
+                          onPressed: () {
+                            ref.read(selectedFilesProvider.notifier).endSelection();
+                          },
+                          icon: Icon(Icons.check_circle_outline),
+                        ) : AccountButton(
                             onLoggedIn: ({required id, required token, required username}) {
                               onLoggedIn(id: id, token: token, username: username, context: context, ref: ref);
                             },
