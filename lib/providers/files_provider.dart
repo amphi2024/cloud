@@ -31,7 +31,23 @@ class FilesState {
     }
     return trash.where((id) => files[id]?.name.toLowerCase().contains(searchKeyword.toLowerCase()) ?? false).toList();
   }
+}
 
+bool isFolderAvailableOffline(String folderId, Map<String, FileModel> files, Map<String, List<String>> idLists) {
+  final childrenIds = idLists[folderId] ?? [];
+
+  if (childrenIds.isEmpty) return false;
+
+  return childrenIds.every((id) {
+    final file = files[id];
+    if (file == null) return false;
+
+    if (file.isFolder) {
+      return isFolderAvailableOffline(id, files, idLists);
+    }
+
+    return file.isAvailableOffline == true;
+  });
 }
 
 class FilesNotifier extends Notifier<FilesState> {
@@ -63,7 +79,12 @@ class FilesNotifier extends Notifier<FilesState> {
     }
 
     trashIds.sortFiles(appCacheData.sortOption("!TRASH"), files);
-    idLists.forEach((folderId, idList) => idList.sortFiles(appCacheData.sortOption(folderId.isEmpty ? "!FILES" : folderId), files));
+    idLists.forEach((folderId, idList) {
+      if(files[folderId]?.isFolder == true) {
+        files[folderId]?.isAvailableOffline = isFolderAvailableOffline(folderId, files, idLists);
+      }
+      idList.sortFiles(appCacheData.sortOption(folderId.isEmpty ? "!FILES" : folderId), files);
+    });
 
     if(files.isEmpty && appSettings.serverAddress.isEmpty) {
       final fileModel = FileModel(id: "WELCOME");
@@ -180,14 +201,13 @@ class FilesNotifier extends Notifier<FilesState> {
           idLists.putIfAbsent(item.parentId, () => []).add(item.id);
         }
       }
-      idLists.forEach((key, value) {
-        if(key.isEmpty) {
-          idLists[key]?.sortFiles(appCacheData.sortOption("!FILES"), files);
+      idLists.forEach((folderId, idList) {
+        if(files[folderId]?.isFolder == true) {
+          files[folderId]?.isAvailableOffline = isFolderAvailableOffline(folderId, files, idLists);
         }
-        else {
-          idLists[key]?.sortFiles(appCacheData.sortOption(key), files);
-        }
+        idList.sortFiles(appCacheData.sortOption(folderId.isEmpty ? "!FILES" : folderId), files);
       });
+
 
       trash.sortFiles(appCacheData.sortOption("!TRASH"), files);
 

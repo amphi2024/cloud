@@ -25,7 +25,12 @@ class FileModel {
   FileModel({required String id, Map<String, dynamic>? data}) : data = data ?? {}, _id = id {
     if(id.length > 2) {
       offlinePath = PathUtils.join(appStorage.selectedUser.storagePath, "files", _id, _id, _id, name);
-      isAvailableOffline = File(offlinePath).existsSync();
+      if(isFolder) {
+        isAvailableOffline = true;
+      }
+      else {
+        isAvailableOffline = File(offlinePath).existsSync();
+      }
     }
   }
 
